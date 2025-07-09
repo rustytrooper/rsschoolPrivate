@@ -7,4 +7,12 @@ export type PersonSWType = {
   hair_color: string;
   homeworld: string;
   starships: [string];
+  url: string;
 };
+
+// export type BerryType = {
+//   id: number;
+//   name: string;
+//   is_main_series: boolean;
+//   url: string;
+// };
