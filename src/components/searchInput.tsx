@@ -29,6 +29,7 @@ export class SearchInput extends Component<SearchInputProps> {
           value={this.state.searchInput}
           onChange={this.handleInputChange}
           placeholder="Your search here"
+          className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
         />
       </div>
     );
