@@ -28,7 +28,6 @@ export class ErrorBoundary extends Component<
     }, 3000);
   }
   render() {
-    console.log('error boundary');
     if (this.state.hasError) {
       return (
         <div>

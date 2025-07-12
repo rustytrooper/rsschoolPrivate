@@ -6,5 +6,3 @@ export type PersonSWType = {
   occupation: string | null;
   hair_color: string;
 };
-
-

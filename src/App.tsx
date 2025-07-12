@@ -4,6 +4,7 @@ import { SearchResults } from './components/searchResults';
 import { ErrorBoundary } from './components/errorBoundary';
 import { type PersonSWType } from './types/interfaces';
 import { SearchControls } from './components/searchControls';
+import { ErrorButton } from './components/errorButton';
 
 interface AppState {
   searchTerm: string;
@@ -12,8 +13,8 @@ interface AppState {
   error: boolean;
 }
 
-class App extends Component<{}, AppState> {
-  constructor(props: {}) {
+class App extends Component<Record<string, unknown>, AppState> {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
       searchTerm: '',
@@ -23,35 +24,35 @@ class App extends Component<{}, AppState> {
     };
   }
   componentDidMount() {
-    const searchQuery = localStorage.getItem('searchQuery');
-    if (searchQuery) {
-      this.setState({ searchTerm: searchQuery });
-    }
     this.fetchData();
   }
 
   fetchData = async () => {
     try {
+      const localStorageSearch = localStorage.getItem('searchItem');
       const response = await fetch(
-        `https://spapi.dev/api/characters?search=${this.state.searchTerm}`
+        `https://spapi.dev/api/characters?search=${
+          localStorageSearch || this.state.searchTerm
+        }`
       );
       const data = await response.json();
       this.setState({
         data: data.data,
         loading: false,
       });
-    } catch (error: any) {
-      this.setState({ error: error.message, loading: false });
+    } catch (error: unknown) {
+      this.setState({ error: true, loading: false });
+      console.error(error);
     }
   };
 
   updateSearchInputValue = (newResult: string) => {
-    this.setState({ searchTerm: newResult });
+    const trimmedResult = newResult.trim();
+    this.setState({ searchTerm: trimmedResult });
   };
 
   render(): ReactNode {
-    const { loading, data } = this.state;
-    console.log(data);
+    const { loading } = this.state;
 
     if (loading) {
       return <div>LOADING</div>;
@@ -61,8 +62,14 @@ class App extends Component<{}, AppState> {
         <SearchControls
           updateSearch={this.updateSearchInputValue}
           onClick={this.fetchData}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              this.fetchData();
+            }
+          }}
         />
         <SearchResults descriptions={this.state.data} />
+        <ErrorButton />
       </ErrorBoundary>
     );
   }

@@ -2,9 +2,6 @@ import { Component, type ReactNode } from 'react';
 import { type PersonSWType } from '../types/interfaces';
 
 export class Card extends Component<PersonSWType> {
-  constructor(props: PersonSWType) {
-    super(props);
-  }
   render(): ReactNode {
     return (
       <div className="h-full bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">

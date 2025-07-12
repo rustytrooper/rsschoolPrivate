@@ -4,8 +4,11 @@ interface ErrorButtonState {
   showError: boolean;
 }
 
-export class ErrorButton extends Component<{}, ErrorButtonState> {
-  constructor(props: ErrorButtonState) {
+export class ErrorButton extends Component<
+  Record<string, unknown>,
+  ErrorButtonState
+> {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
       showError: false,
@@ -22,7 +25,7 @@ export class ErrorButton extends Component<{}, ErrorButtonState> {
     }
     return (
       <button
-        className="bg-cyan-500 text-white font-semibold py-2 px-4 rounded hover:bg-cyan-600 cursor-pointer transition-colors"
+        className="bg-cyan-500 text-white font-semibold py-2 px-4 rounded hover:bg-cyan-600 cursor-pointer transition-colors my-2"
         onClick={() => this.handleButtonClick()}
       >
         Check error boundary
