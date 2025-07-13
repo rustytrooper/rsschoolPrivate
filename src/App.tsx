@@ -5,6 +5,7 @@ import { ErrorBoundary } from './components/errorBoundary';
 import { type PersonSWType } from './types/interfaces';
 import { SearchControls } from './components/searchControls';
 import { ErrorButton } from './components/errorButton';
+import { Loader } from './components/loader';
 
 interface AppState {
   searchTerm: string;
@@ -55,7 +56,7 @@ class App extends Component<Record<string, unknown>, AppState> {
     const { loading } = this.state;
 
     if (loading) {
-      return <div>LOADING</div>;
+      return <Loader />;
     }
     return (
       <ErrorBoundary>
