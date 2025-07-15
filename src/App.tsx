@@ -1,11 +1,10 @@
-import './App.css';
 import { Component, type ReactNode } from 'react';
-import { SearchResults } from './components/searchResults';
-import { ErrorBoundary } from './components/errorBoundary';
+import { SearchResults } from './components/SearchResults';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { type PersonSWType } from './types/interfaces';
-import { SearchControls } from './components/searchControls';
-import { ErrorButton } from './components/errorButton';
-import { Loader } from './components/loader';
+import { ErrorButton } from './components/ErrorButton';
+import { Loader } from './components/loader/Loader';
+import { SearchForm } from './components/SearchForm';
 
 interface AppState {
   searchTerm: string;
@@ -60,14 +59,10 @@ class App extends Component<Record<string, unknown>, AppState> {
     }
     return (
       <ErrorBoundary>
-        <SearchControls
+        <SearchForm
           updateSearch={this.updateSearchInputValue}
           onClick={this.fetchData}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              this.fetchData();
-            }
-          }}
+          onFormSubmit={this.fetchData}
         />
         <SearchResults descriptions={this.state.data} />
         <ErrorButton />
