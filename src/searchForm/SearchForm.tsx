@@ -32,6 +32,7 @@ export class SearchForm extends Component<SearchFormProps> {
         role="form"
       >
         <input
+          data-testid="textbox"
           autoFocus
           type="text"
           value={this.state.searchInput}

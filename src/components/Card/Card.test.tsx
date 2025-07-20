@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { Card } from './Card';
 
 describe('Card Component', () => {
-  test('displays item names and descriptions correctly', () => {
+  it('displays item names and descriptions correctly', () => {
     const mockData = {
       id: 1,
       name: 'Luke Skywalker',
@@ -23,7 +23,7 @@ describe('Card Component', () => {
     expect(screen.getByText(/occupation: Jedi/i)).toBeInTheDocument();
   });
 
-  test('handles missing or undefined data gracefully', () => {
+  it('handles missing or undefined data gracefully', () => {
     const mockData = {
       id: null,
       name: null,

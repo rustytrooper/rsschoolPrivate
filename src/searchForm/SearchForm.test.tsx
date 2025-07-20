@@ -1,7 +1,6 @@
-// import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { describe, expect, vi, test, beforeEach } from 'vitest';
+import { describe, expect, vi, it, beforeEach } from 'vitest';
 import { SearchForm } from './SearchForm';
 
 const updateSearchMock = vi.fn();
@@ -13,7 +12,7 @@ describe('Search Form Tests', () => {
     localStorage.clear();
   });
 
-  test('renders search input and search button', () => {
+  it('renders search input and search button', () => {
     render(
       <SearchForm
         updateSearch={updateSearchMock}
@@ -27,7 +26,7 @@ describe('Search Form Tests', () => {
     expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
   });
 
-  test('displays previously saved search term from localStorage on mount', async () => {
+  it('displays previously saved search term from localStorage on mount', async () => {
     localStorage.setItem('searchItem', 'cartman');
     render(
       <SearchForm
@@ -46,7 +45,7 @@ describe('Search Form Tests', () => {
     });
   });
 
-  test('shows empty input when no saved term exists', async () => {
+  it('shows empty input when no saved term exists', async () => {
     localStorage.removeItem('searchItem');
     render(
       <SearchForm
@@ -62,7 +61,7 @@ describe('Search Form Tests', () => {
     expect(input.value).toBe('');
   });
 
-  test('updates input value when user types', () => {
+  it('updates input value when user types', () => {
     render(
       <SearchForm
         updateSearch={updateSearchMock}
@@ -77,7 +76,7 @@ describe('Search Form Tests', () => {
     expect(input.value).toBe('broflovski');
   });
 
-  test('saves search term to localStorage when search button is clicked', () => {
+  it('saves search term to localStorage when search button is clicked', () => {
     render(
       <SearchForm
         updateSearch={updateSearchMock}
@@ -92,7 +91,7 @@ describe('Search Form Tests', () => {
     expect(localStorage.getItem('searchItem')).toBe('spooky fish');
   });
 
-  test('trims whitespace from search input before saving', () => {
+  it('trims whitespace from search input before saving', () => {
     render(
       <SearchForm
         updateSearch={updateSearchMock}
@@ -108,7 +107,7 @@ describe('Search Form Tests', () => {
     expect(localStorage.getItem('searchItem')).toBe('term with spaces');
   });
 
-  test('retrieves saved search term on component mount', () => {
+  it('retrieves saved search term on component mount', () => {
     localStorage.setItem('searchItem', 'fred');
     render(
       <SearchForm
@@ -123,7 +122,7 @@ describe('Search Form Tests', () => {
     expect(input.value).toBe('fred');
   });
 
-  test('overwrites existing localStorage value when new search is performed', () => {
+  it('overwrites existing localStorage value when new search is performed', () => {
     localStorage.setItem('searchItem', 'stan');
     render(
       <SearchForm
