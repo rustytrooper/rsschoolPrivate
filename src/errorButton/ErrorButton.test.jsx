@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { ErrorButton } from './errorButton';
+import { ErrorButton } from './ErrorButton';
 import React from 'react';
 import '@testing-library/jest-dom';
 

@@ -3,11 +3,6 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
 
-// createRoot(document.getElementById('root')!).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>
-// );
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
@@ -17,5 +12,5 @@ if (rootElement) {
     </StrictMode>
   );
 } else {
-  console.error('Ошибка: элемент с ID "root" не найден.');
+  throw new Error('Element with ID "root" not found.');
 }

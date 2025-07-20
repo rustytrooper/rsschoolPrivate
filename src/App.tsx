@@ -1,17 +1,19 @@
-import './App.css';
 import { Component, type ReactNode } from 'react';
-import { SearchResults } from './components/searchResults';
-import { ErrorBoundary } from './components/errorBoundary';
+import { SearchResults } from './components/SearchResults/SearchResults';
+import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import { type PersonSWType } from './types/interfaces';
-import { SearchControls } from './components/searchControls';
-import { ErrorButton } from './components/errorButton';
-import { Loader } from './components/loader';
+import { ErrorButton } from './errorButton/ErrorButton';
+import { Loader } from './components/loader/Loader';
+import { SearchForm } from './searchForm/SearchForm';
+import { personService } from './shared/personService';
 
 interface AppState {
   searchTerm: string;
   data: PersonSWType[];
   loading: boolean;
   error: boolean;
+  status: null | number;
+  errorMessage?: string;
 }
 
 class App extends Component<Record<string, unknown>, AppState> {
@@ -22,6 +24,7 @@ class App extends Component<Record<string, unknown>, AppState> {
       data: [],
       loading: true,
       error: false,
+      status: null,
     };
   }
   componentDidMount() {
@@ -29,21 +32,22 @@ class App extends Component<Record<string, unknown>, AppState> {
   }
 
   fetchData = async () => {
-    try {
-      const localStorageSearch = localStorage.getItem('searchItem');
-      const response = await fetch(
-        `https://spapi.dev/api/characters?search=${
-          localStorageSearch || this.state.searchTerm
-        }`
-      );
-      const data = await response.json();
+    const service = new personService();
+    const { searchTerm } = this.state;
+    const { dataFetched, errorMessage } = await service.fetchData(searchTerm);
+
+    if (errorMessage) {
       this.setState({
-        data: data.data,
+        error: true,
+        loading: false,
+        status: errorMessage.includes('400') ? 400 : 500,
+        errorMessage,
+      });
+    } else {
+      this.setState({
+        data: dataFetched || [],
         loading: false,
       });
-    } catch (error: unknown) {
-      this.setState({ error: true, loading: false });
-      console.error(error);
     }
   };
 
@@ -54,23 +58,26 @@ class App extends Component<Record<string, unknown>, AppState> {
 
   render(): ReactNode {
     const { loading } = this.state;
-
-    if (loading) {
-      return <Loader />;
-    }
     return (
       <ErrorBoundary>
-        <SearchControls
-          updateSearch={this.updateSearchInputValue}
-          onClick={this.fetchData}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              this.fetchData();
-            }
-          }}
-        />
-        <SearchResults descriptions={this.state.data} />
-        <ErrorButton />
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <SearchForm
+              updateSearch={this.updateSearchInputValue}
+              onClick={this.fetchData}
+              onFormSubmit={this.fetchData}
+            />
+            <SearchResults
+              descriptions={this.state.data}
+              error={this.state.error}
+              status={this.state.status}
+              errorMessage={this.state.errorMessage}
+            />
+            <ErrorButton />
+          </>
+        )}
       </ErrorBoundary>
     );
   }
