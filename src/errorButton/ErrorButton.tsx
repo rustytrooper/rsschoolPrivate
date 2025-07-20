@@ -1,7 +1,8 @@
 import { Component } from 'react';
+import { BaseButton } from '../components/BaseButton';
 
 interface ErrorButtonState {
-  showError: boolean;
+  isErrorShown: boolean;
 }
 
 export class ErrorButton extends Component<
@@ -11,25 +12,22 @@ export class ErrorButton extends Component<
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      showError: false,
+      isErrorShown: false,
     };
   }
 
   handleButtonClick = () => {
-    this.setState({ showError: true });
+    this.setState({ isErrorShown: true });
   };
 
   render() {
-    if (this.state.showError) {
+    if (this.state.isErrorShown) {
       throw new Error('This is a test error!');
     }
     return (
-      <button
-        className="bg-cyan-500 text-white font-semibold py-2 px-4 rounded hover:bg-cyan-600 cursor-pointer transition-colors my-2"
-        onClick={() => this.handleButtonClick()}
-      >
+      <BaseButton onClick={this.handleButtonClick} additionalClasses="my-3">
         Check error boundary
-      </button>
+      </BaseButton>
     );
   }
 }
