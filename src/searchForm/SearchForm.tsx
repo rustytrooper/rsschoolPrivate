@@ -28,7 +28,7 @@ export class SearchForm extends Component<SearchFormProps> {
     return (
       <form
         onSubmit={this.props.onFormSubmit}
-        className="flex justify-between my-3"
+        className="flex justify-between my-3 mt-10"
         role="form"
       >
         <input
@@ -38,7 +38,7 @@ export class SearchForm extends Component<SearchFormProps> {
           value={this.state.searchInput}
           onChange={this.handleInputChange}
           placeholder="Your search here"
-          className="w-80 flex px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+          className="w-80 flex px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
         />
         <BaseButton onClick={this.props.onClick}>Search</BaseButton>
       </form>
