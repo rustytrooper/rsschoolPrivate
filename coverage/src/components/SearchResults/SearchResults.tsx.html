@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">95% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/28</span>
+                <span class='fraction'>38/40</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>1/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/28</span>
+                <span class='fraction'>38/40</span>
             </div>
         
             
@@ -103,7 +103,23 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -115,8 +131,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -137,15 +166,18 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Component, type ReactNode } from 'react';
-import { type PersonSWType } from '../../types/interfaces';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { type PersonSWType } from '../../types/interfaces';
 import { Card } from '../Card/Card';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 &nbsp;
 interface SearchResultsProps {
   descriptions: PersonSWType[];
@@ -154,34 +186,50 @@ interface SearchResultsProps {
   errorMessage?: string;
 }
 &nbsp;
-export class SearchResults extends Component&lt;SearchResultsProps&gt; {
-  render(): ReactNode {
-    const { descriptions, error, status, errorMessage } = this.props;
-    return (
-      &lt;div className="w-full p-4 shadow-md flex flex-col bg-slate-300 rounded-lg h-[80vh]"&gt;
-        {error &amp;&amp; (
-          &lt;&gt;
-            &lt;p className="text-center my-auto text-2xl"&gt;
-              Error occurred: {status ? `Status ${status<span class="branch-0 cbranch-no" title="branch not covered" >}` : 'Unknown error'}</span>
-            &lt;/p&gt;
-            {errorMessage &amp;&amp; &lt;p&gt;{errorMessage}&lt;/p&gt;}
-          &lt;/&gt;
-        )}
-        {descriptions.length === 0 &amp;&amp; !error &amp;&amp; (
-          &lt;p className="text-center my-auto text-2xl"&gt;No results&lt;/p&gt;
-        )}
-        &lt;ul className="grid grid-cols-3 gap-4 mb-5"&gt;
-          {descriptions.map((person: PersonSWType) =&gt; {
-            return (
-              &lt;li key={person.name}&gt;
-                &lt;Card {...person} /&gt;
-              &lt;/li&gt;
-            );
-          })}
-        &lt;/ul&gt;
-      &lt;/div&gt;
-    );
-  }
+export function SearchResults({
+  descriptions,
+  error,
+  errorMessage,
+  status,
+}: SearchResultsProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+&nbsp;
+  const params = new URLSearchParams(location.search);
+  const page = params.get('page');
+&nbsp;
+  const handleCardClick = <span class="fstat-no" title="function not covered" >(id: number) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    navigate(`page/${page}/card/${id}`);</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
+&nbsp;
+  return (
+    &lt;div className="w-full p-4 shadow-md flex flex-col bg-slate-300 rounded-lg h-[80vh]"&gt;
+      {error &amp;&amp; (
+        &lt;&gt;
+          &lt;p className="text-center my-auto text-2xl"&gt;
+            Error occurred: {status ? `Status ${status<span class="branch-0 cbranch-no" title="branch not covered" >}` : 'Unknown error'}</span>
+          &lt;/p&gt;
+          {errorMessage &amp;&amp; &lt;p&gt;{errorMessage}&lt;/p&gt;}
+        &lt;/&gt;
+      )}
+      {descriptions.length === 0 &amp;&amp; !error &amp;&amp; (
+        &lt;p className="text-center my-auto text-2xl"&gt;No results&lt;/p&gt;
+      )}
+      &lt;ul className="grid grid-cols-3 gap-4 mb-5"&gt;
+        {descriptions.map((person: PersonSWType) =&gt; {
+          return (
+            &lt;li
+              onClick={<span class="fstat-no" title="function not covered" >() =&gt; person.id !== null &amp;&amp; handleCardClick(person.id)}</span>
+              key={person.name}
+            &gt;
+              &lt;Card {...person} /&gt;
+            &lt;/li&gt;
+          );
+        })}
+      &lt;/ul&gt;
+      &lt;Outlet /&gt;
+    &lt;/div&gt;
+  );
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -190,7 +238,7 @@ export class SearchResults extends Component&lt;SearchResultsProps&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-20T15:11:36.293Z
+                at 2025-07-27T16:30:33.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

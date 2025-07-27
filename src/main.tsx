@@ -5,6 +5,7 @@ import './index.css';
 import App from './App.tsx';
 import { About } from './components/About/About.tsx';
 import { Layout } from './components/Layout/Layout.tsx';
+import { CardDetails } from './components/DetailsPanel/DetailsPanel.tsx';
 
 const router = createBrowserRouter([
   {
@@ -12,8 +13,19 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        index: true,
+        path: '/',
         element: <App />,
+        children: [
+          {
+            path: 'page/:page',
+            children: [
+              {
+                path: 'card/:id',
+                element: <CardDetails />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'about',

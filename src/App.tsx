@@ -5,8 +5,9 @@ import { type PersonSWType } from './types/interfaces';
 import { Loader } from './components/loader/Loader';
 import { SearchForm } from './searchForm/SearchForm';
 import { PaginationControls } from './components/PaginationControls/PaginationControls';
-import { useNavigate } from 'react-router';
+import { useNavigate, Outlet, useParams } from 'react-router';
 import fetchData from './shared/useFetchData';
+import styles from './components/App/App.module.css';
 
 export interface AppState {
   searchTerm: string;
@@ -21,21 +22,26 @@ export interface AppState {
 const ALL_PAGES = 20;
 
 const App: React.FC = () => {
+  const { page = '1' } = useParams();
   const [appState, setAppState] = useState<AppState>({
     searchTerm: localStorage.getItem('searchItem') || '',
     data: [],
-    currentPage: 1,
+    currentPage: parseInt(page),
     loading: true,
     error: false,
     status: null,
     errorMessage: '',
   });
+  const [isOutletVisible, setOutletVisible] = useState(false);
+
+  const showOutlet = () => setOutletVisible(true);
+  const hideOutlet = () => setOutletVisible(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData(appState.currentPage, setAppState, appState);
-    navigate(`?page=${appState.currentPage}`);
-  }, [appState.currentPage]);
+    navigate(`/page/${appState.currentPage}`);
+  }, [appState.currentPage, navigate]);
 
   function updateSearchInputValue(newResult: string) {
     const trimmedResult = newResult.trim();
@@ -46,12 +52,12 @@ const App: React.FC = () => {
     }));
   }
   function handleSearch() {
-    fetchData(appState.currentPage, setAppState, appState);
+    fetchData(1, setAppState, appState);
     setAppState((prev) => ({
       ...prev,
       currentPage: 1,
     }));
-    navigate(`?page=1`);
+    navigate(`/page/1`);
   }
 
   function handlePageChange(page: number) {
@@ -59,6 +65,7 @@ const App: React.FC = () => {
       ...appState,
       currentPage: page,
     });
+    navigate(`/page/${page}`);
   }
   function handleNextPage() {
     if (appState.currentPage <= ALL_PAGES) {
@@ -83,27 +90,53 @@ const App: React.FC = () => {
         <Loader />
       ) : (
         <>
-          <SearchForm
-            updateSearch={updateSearchInputValue}
-            onClick={handleSearch}
-            onFormSubmit={(e) => {
-              e.preventDefault();
-              handleSearch();
-            }}
-          />
-          <SearchResults
-            descriptions={appState.data}
-            error={appState.error}
-            status={appState.status}
-            errorMessage={appState.errorMessage}
-          />
-          <PaginationControls
-            totalPages={ALL_PAGES}
-            handlePageChange={handlePageChange}
-            handleNextPage={handleNextPage}
-            handlePreviousPage={handlePreviousPage}
-            currentPage={appState.currentPage}
-          />
+          {isOutletVisible && (
+            <div className={styles.overlay} onClick={hideOutlet}>
+              <button
+                onClick={() => {
+                  navigate(
+                    appState.currentPage ? `/page/${appState.currentPage}` : '/'
+                  );
+                }}
+                className="absolute w-10 top-4 right-4 text-lg bg-white rounded shadow-md p-2 hover:bg-gray-200 cursor-pointer transition-colors"
+              >
+                {'X'}
+              </button>
+            </div>
+          )}
+
+          <div
+            className={`${styles.content} ${isOutletVisible ? styles.blur : ''}`}
+          >
+            <SearchForm
+              updateSearch={updateSearchInputValue}
+              onClick={handleSearch}
+              onFormSubmit={(e) => {
+                e.preventDefault();
+                handleSearch();
+              }}
+            />
+            <SearchResults
+              descriptions={appState.data}
+              error={appState.error}
+              status={appState.status}
+              errorMessage={appState.errorMessage}
+              onCardClick={showOutlet}
+            />
+            <PaginationControls
+              totalPages={ALL_PAGES}
+              handlePageChange={handlePageChange}
+              handleNextPage={handleNextPage}
+              handlePreviousPage={handlePreviousPage}
+              currentPage={appState.currentPage}
+            />
+          </div>
+
+          {isOutletVisible && (
+            <div className={styles.outlet}>
+              <Outlet />
+            </div>
+          )}
         </>
       )}
     </ErrorBoundary>

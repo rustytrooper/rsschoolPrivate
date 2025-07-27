@@ -20,4 +20,21 @@ export class personService {
       return { dataFetched: null, errorMessage: 'Error while fetching data' };
     }
   };
+
+  fetchCharacterData = async (
+    id: number
+  ): Promise<{
+    dataFetched: PersonSWType | null;
+    errorMessage: string | null;
+  }> => {
+    try {
+      const response = await fetch(`${BASE_URL}/${id}`);
+      const data = await response.json();
+      const dataFetched: PersonSWType = data.data;
+      return { dataFetched, errorMessage: null };
+    } catch (error) {
+      console.error(error);
+      return { dataFetched: null, errorMessage: 'Error while fetching data' };
+    }
+  };
 }

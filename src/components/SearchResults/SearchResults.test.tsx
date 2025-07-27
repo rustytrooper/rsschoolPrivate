@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
 import { type PersonSWType } from '../../types/interfaces';
 import { SearchResults } from './SearchResults';
+import { MemoryRouter } from 'react-router';
 
 describe('SearchResults Component', () => {
   it('displays error message when API call fails', () => {
@@ -11,9 +12,14 @@ describe('SearchResults Component', () => {
       error: true,
       status: 500,
       errorMessage: 'Internal Server Error',
+      onCardClick: () => {},
     };
 
-    render(<SearchResults {...mockProps} />);
+    render(
+      <MemoryRouter>
+        <SearchResults {...mockProps} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(/Error occurred: Status 500/i)).toBeInTheDocument();
     expect(screen.getByText(/Internal Server Error/i)).toBeInTheDocument();
@@ -25,9 +31,14 @@ describe('SearchResults Component', () => {
       error: true,
       status: 400,
       errorMessage: 'Bad Request',
+      onCardClick: () => {},
     };
 
-    render(<SearchResults {...mockProps} />);
+    render(
+      <MemoryRouter>
+        <SearchResults {...mockProps} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(/Error occurred: Status 400/i)).toBeInTheDocument();
     expect(screen.getByText(/Bad Request/i)).toBeInTheDocument();
@@ -39,9 +50,14 @@ describe('SearchResults Component', () => {
       error: false,
       status: null,
       errorMessage: undefined,
+      onCardClick: () => {},
     };
 
-    render(<SearchResults {...mockProps} />);
+    render(
+      <MemoryRouter>
+        <SearchResults {...mockProps} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(/No results/i)).toBeInTheDocument();
   });
@@ -71,9 +87,14 @@ describe('SearchResults Component', () => {
       error: false,
       status: null,
       errorMessage: undefined,
+      onCardClick: () => {},
     };
 
-    render(<SearchResults {...mockProps} />);
+    render(
+      <MemoryRouter>
+        <SearchResults {...mockProps} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument();
     expect(screen.getByText(/Darth Vader/i)).toBeInTheDocument();
