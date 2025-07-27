@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>38/40</span>
+                <span class='fraction'>39/42</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>38/40</span>
+                <span class='fraction'>39/42</span>
             </div>
         
             
@@ -119,7 +119,11 @@
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -130,6 +134,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -138,16 +144,18 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -165,11 +173,11 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -177,13 +185,15 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { type PersonSWType } from '../../types/interfaces';
 import { Card } from '../Card/Card';
-import { Outlet, useLocation, useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 &nbsp;
 interface SearchResultsProps {
   descriptions: PersonSWType[];
   error: boolean;
   status: null | number;
   errorMessage?: string;
+  className?: string;
+  onCardClick: (id: number) =&gt; void;
 }
 &nbsp;
 export function SearchResults({
@@ -191,19 +201,21 @@ export function SearchResults({
   error,
   errorMessage,
   status,
+  className,
+  onCardClick,
 }: SearchResultsProps) {
   const navigate = useNavigate();
-  const location = useLocation();
-&nbsp;
-  const params = new URLSearchParams(location.search);
-  const page = params.get('page');
+  const { page } = useParams();
 &nbsp;
   const handleCardClick = <span class="fstat-no" title="function not covered" >(id: number) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    navigate(`page/${page}/card/${id}`);</span>
+<span class="cstat-no" title="statement not covered" >    navigate(`/page/${page}/card/${id}`);</span>
+<span class="cstat-no" title="statement not covered" >    onCardClick(id);</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
 &nbsp;
   return (
-    &lt;div className="w-full p-4 shadow-md flex flex-col bg-slate-300 rounded-lg h-[80vh]"&gt;
+    &lt;div
+      className={`w-full p-4 shadow-md flex flex-col bg-slate-300 rounded-lg h-[80vh] ${className}`}
+    &gt;
       {error &amp;&amp; (
         &lt;&gt;
           &lt;p className="text-center my-auto text-2xl"&gt;
@@ -219,6 +231,7 @@ export function SearchResults({
         {descriptions.map((person: PersonSWType) =&gt; {
           return (
             &lt;li
+              data-testid="character-card"
               onClick={<span class="fstat-no" title="function not covered" >() =&gt; person.id !== null &amp;&amp; handleCardClick(person.id)}</span>
               key={person.name}
             &gt;
@@ -227,7 +240,6 @@ export function SearchResults({
           );
         })}
       &lt;/ul&gt;
-      &lt;Outlet /&gt;
     &lt;/div&gt;
   );
 }
@@ -238,7 +250,7 @@ export function SearchResults({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-27T16:30:33.407Z
+                at 2025-07-27T23:05:57.352Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

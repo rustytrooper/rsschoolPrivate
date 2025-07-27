@@ -1,12 +1,8 @@
-import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import App from '../../App';
-import { MemoryRouter } from 'react-router';
-import type { PersonSWType } from '../../types/interfaces';
-import { personService } from '../../shared/personService';
-import '@testing-library/jest-dom';
+import { personService } from './personService';
+import type { PersonSWType } from '../types/interfaces';
 
-describe('App Component', () => {
+describe('personService', () => {
   const service = new personService();
 
   it('mocks fetchData method', async () => {
@@ -55,42 +51,5 @@ describe('App Component', () => {
     expect(spy).toHaveReturnedWith(
       Promise.resolve({ dataFetched: mockCharacter, errorMessage: null })
     );
-  });
-  it('renders loading indicator initially', () => {
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    expect(getByTestId('loader')).toBeInTheDocument();
-  });
-
-  it('has appropriate ARIA labels for screen readers', () => {
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    const loader = getByTestId('loader');
-    expect(loader).toHaveAttribute('aria-label', 'Loading...');
-  });
-
-  it('renders loading indicator initially', () => {
-    render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    expect(screen.getByTestId('loader')).toBeInTheDocument();
-  });
-
-  it('has appropriate ARIA labels for screen readers', () => {
-    render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    const loader = screen.getByTestId('loader');
-    expect(loader).toHaveAttribute('aria-label', 'Loading...');
   });
 });

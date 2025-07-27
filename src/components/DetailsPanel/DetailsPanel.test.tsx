@@ -1,13 +1,18 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import App from '../../App';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router';
-import type { PersonSWType } from '../../types/interfaces';
+
+import { CardDetails } from './DetailsPanel';
 import { personService } from '../../shared/personService';
+import type { PersonSWType } from '../../types/interfaces';
 import '@testing-library/jest-dom';
 
-describe('App Component', () => {
+describe('CardDetails', () => {
   const service = new personService();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('mocks fetchData method', async () => {
     const mockData: PersonSWType[] = [
@@ -56,41 +61,21 @@ describe('App Component', () => {
       Promise.resolve({ dataFetched: mockCharacter, errorMessage: null })
     );
   });
-  it('renders loading indicator initially', () => {
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    expect(getByTestId('loader')).toBeInTheDocument();
-  });
 
-  it('has appropriate ARIA labels for screen readers', () => {
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    const loader = getByTestId('loader');
-    expect(loader).toHaveAttribute('aria-label', 'Loading...');
-  });
+  it('handles loading state correctly', async () => {
+    vi.spyOn(service, 'fetchCharacterData').mockImplementationOnce(() => {
+      return new Promise(() => {});
+    });
 
-  it('renders loading indicator initially', () => {
     render(
-      <MemoryRouter>
-        <App />
+      <MemoryRouter initialEntries={['/card/1']}>
+        <CardDetails />
       </MemoryRouter>
     );
-    expect(screen.getByTestId('loader')).toBeInTheDocument();
-  });
 
-  it('has appropriate ARIA labels for screen readers', () => {
-    render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    const loader = screen.getByTestId('loader');
-    expect(loader).toHaveAttribute('aria-label', 'Loading...');
+    expect(
+      screen.queryByText(/A South Park character with the name/i)
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/hair color/i)).not.toBeInTheDocument();
   });
 });

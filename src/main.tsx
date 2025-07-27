@@ -6,6 +6,7 @@ import App from './App.tsx';
 import { About } from './components/About/About.tsx';
 import { Layout } from './components/Layout/Layout.tsx';
 import { CardDetails } from './components/DetailsPanel/DetailsPanel.tsx';
+import { ErrorPage } from './components/ErrorPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: 'about',
         element: <About />,
+      },
+      {
+        path: '*',
+        element: <ErrorPage />,
       },
     ],
   },
