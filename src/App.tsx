@@ -1,86 +1,146 @@
-import { Component, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchResults } from './components/SearchResults/SearchResults';
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import { type PersonSWType } from './types/interfaces';
-import { ErrorButton } from './errorButton/ErrorButton';
 import { Loader } from './components/loader/Loader';
 import { SearchForm } from './searchForm/SearchForm';
-import { personService } from './shared/personService';
+import { PaginationControls } from './components/PaginationControls/PaginationControls';
+import { useNavigate, Outlet, useParams } from 'react-router';
+import fetchData from './shared/useFetchData';
+import styles from './components/App/App.module.css';
 
-interface AppState {
+export interface AppState {
   searchTerm: string;
   data: PersonSWType[];
+  currentPage: number;
   loading: boolean;
   error: boolean;
   status: null | number;
   errorMessage?: string;
 }
 
-class App extends Component<Record<string, unknown>, AppState> {
-  constructor(props: Record<string, unknown>) {
-    super(props);
-    this.state = {
-      searchTerm: '',
-      data: [],
-      loading: true,
-      error: false,
-      status: null,
-    };
+const ALL_PAGES = 20;
+
+const App: React.FC = () => {
+  const { page = '1' } = useParams();
+  const [appState, setAppState] = useState<AppState>({
+    searchTerm: localStorage.getItem('searchItem') || '',
+    data: [],
+    currentPage: parseInt(page),
+    loading: true,
+    error: false,
+    status: null,
+    errorMessage: '',
+  });
+  const [isOutletVisible, setOutletVisible] = useState(false);
+
+  const showOutlet = () => setOutletVisible(true);
+  const hideOutlet = () => setOutletVisible(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchData(appState.currentPage, setAppState, appState);
+    navigate(`/page/${appState.currentPage}`);
+  }, [appState.currentPage, navigate]);
+
+  function updateSearchInputValue(newResult: string) {
+    const trimmedResult = newResult.trim();
+    setAppState((prevState) => ({
+      ...prevState,
+      searchTerm: trimmedResult,
+      currentPage: 1,
+    }));
   }
-  componentDidMount() {
-    this.fetchData();
+  function handleSearch() {
+    fetchData(1, setAppState, appState);
+    setAppState((prev) => ({
+      ...prev,
+      currentPage: 1,
+    }));
+    navigate(`/page/1`);
   }
 
-  fetchData = async () => {
-    const service = new personService();
-    const { searchTerm } = this.state;
-    const { dataFetched, errorMessage } = await service.fetchData(searchTerm);
-
-    if (errorMessage) {
-      this.setState({
-        error: true,
-        loading: false,
-        status: errorMessage.includes('400') ? 400 : 500,
-        errorMessage,
-      });
-    } else {
-      this.setState({
-        data: dataFetched || [],
-        loading: false,
+  function handlePageChange(page: number) {
+    setAppState({
+      ...appState,
+      currentPage: page,
+    });
+    navigate(`/page/${page}`);
+  }
+  function handleNextPage() {
+    if (appState.currentPage <= ALL_PAGES) {
+      setAppState({
+        ...appState,
+        currentPage: appState.currentPage + 1,
       });
     }
-  };
+  }
+  function handlePreviousPage() {
+    if (appState.currentPage >= 1) {
+      setAppState({
+        ...appState,
+        currentPage: appState.currentPage - 1,
+      });
+    }
+  }
 
-  updateSearchInputValue = (newResult: string) => {
-    const trimmedResult = newResult.trim();
-    this.setState({ searchTerm: trimmedResult });
-  };
+  return (
+    <ErrorBoundary>
+      {appState.loading ? (
+        <Loader />
+      ) : (
+        <>
+          {isOutletVisible && (
+            <div className={styles.overlay} onClick={hideOutlet}>
+              <button
+                onClick={() => {
+                  navigate(
+                    appState.currentPage ? `/page/${appState.currentPage}` : '/'
+                  );
+                }}
+                className="absolute w-10 top-4 right-4 text-lg bg-white rounded shadow-md p-2 hover:bg-gray-200 cursor-pointer transition-colors"
+              >
+                {'X'}
+              </button>
+            </div>
+          )}
 
-  render(): ReactNode {
-    const { loading } = this.state;
-    return (
-      <ErrorBoundary>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
+          <div
+            className={`${styles.content} ${isOutletVisible ? styles.blur : ''}`}
+          >
             <SearchForm
-              updateSearch={this.updateSearchInputValue}
-              onClick={this.fetchData}
-              onFormSubmit={this.fetchData}
+              updateSearch={updateSearchInputValue}
+              onClick={handleSearch}
+              onFormSubmit={(e) => {
+                e.preventDefault();
+                handleSearch();
+              }}
             />
             <SearchResults
-              descriptions={this.state.data}
-              error={this.state.error}
-              status={this.state.status}
-              errorMessage={this.state.errorMessage}
+              descriptions={appState.data}
+              error={appState.error}
+              status={appState.status}
+              errorMessage={appState.errorMessage}
+              onCardClick={showOutlet}
             />
-            <ErrorButton />
-          </>
-        )}
-      </ErrorBoundary>
-    );
-  }
-}
+            <PaginationControls
+              totalPages={ALL_PAGES}
+              handlePageChange={handlePageChange}
+              handleNextPage={handleNextPage}
+              handlePreviousPage={handlePreviousPage}
+              currentPage={appState.currentPage}
+            />
+          </div>
+
+          {isOutletVisible && (
+            <div className={styles.outlet}>
+              <Outlet />
+            </div>
+          )}
+        </>
+      )}
+    </ErrorBoundary>
+  );
+};
 
 export default App;

@@ -1,20 +1,15 @@
-import { Component, type ReactNode } from 'react';
 import { type PersonSWType } from '../../types/interfaces';
 
-export class Card extends Component<PersonSWType> {
-  render(): ReactNode {
-    return (
-      <div className="h-full bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">
-        <p className="text-lg font-semibold text-gray-800">
-          {this.props.name || 'Unknown Name'}
-        </p>
-        <p className="mt-2 text-gray-600">
-          {this.props.hair_color || 'No Hair Color'}
-        </p>
-        <p>{this.props.sex || 'Unknown Sex'}</p>
-        <p>{this.props.age !== null ? this.props.age : 'Age not specified'}</p>
-        <p>{`occupation: ${this.props.occupation || 'No Occupation'}`}</p>
-      </div>
-    );
-  }
+export function Card({ name, hair_color, sex, age, occupation }: PersonSWType) {
+  return (
+    <div className="h-full bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">
+      <p className="text-lg font-semibold text-gray-800">
+        {name || 'Unknown Name'}
+      </p>
+      <p className="mt-2 text-gray-600">{hair_color || 'No Hair Color'}</p>
+      <p>{sex || 'Unknown Sex'}</p>
+      <p>{age !== null ? age : 'Age not specified'}</p>
+      <p>{`occupation: ${occupation || 'No Occupation'}`}</p>
+    </div>
+  );
 }
