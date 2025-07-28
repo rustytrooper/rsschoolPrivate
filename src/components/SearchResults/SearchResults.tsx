@@ -1,6 +1,7 @@
 import { type PersonSWType } from '../../types/interfaces';
 import { Card } from '../Card/Card';
 import { useNavigate, useParams } from 'react-router';
+import { SearchResultsConstants } from './SearchResultsConsrants';
 
 interface SearchResultsProps {
   descriptions: PersonSWType[];
@@ -22,15 +23,15 @@ export function SearchResults({
   const navigate = useNavigate();
   const { page } = useParams();
 
+  const { bgckClassname } = SearchResultsConstants(className as string);
+
   const handleCardClick = (id: number) => {
     navigate(`/page/${page}/card/${id}`);
     onCardClick(id);
   };
 
   return (
-    <div
-      className={`w-full p-4 shadow-md flex flex-col bg-slate-300 rounded-lg h-[80vh] ${className}`}
-    >
+    <div className={bgckClassname}>
       {error && (
         <>
           <p className="text-center my-auto text-2xl">

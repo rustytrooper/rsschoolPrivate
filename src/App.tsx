@@ -8,6 +8,7 @@ import { PaginationControls } from './components/PaginationControls/PaginationCo
 import { useNavigate, Outlet, useParams } from 'react-router';
 import fetchData from './shared/useFetchData';
 import styles from './components/App/App.module.css';
+import { AppStyles } from './components/App/AppStyles';
 
 export interface AppState {
   searchTerm: string;
@@ -33,6 +34,7 @@ const App: React.FC = () => {
     errorMessage: '',
   });
   const [isOutletVisible, setOutletVisible] = useState(false);
+  const { buttonClassname } = AppStyles();
 
   const showOutlet = () => setOutletVisible(true);
   const hideOutlet = () => setOutletVisible(false);
@@ -98,7 +100,7 @@ const App: React.FC = () => {
                     appState.currentPage ? `/page/${appState.currentPage}` : '/'
                   );
                 }}
-                className="absolute w-10 top-4 right-4 text-lg bg-white rounded shadow-md p-2 hover:bg-gray-200 cursor-pointer transition-colors"
+                className={buttonClassname}
               >
                 {'X'}
               </button>

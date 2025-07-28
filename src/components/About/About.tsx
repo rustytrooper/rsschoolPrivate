@@ -1,7 +1,8 @@
 import ImageLink from '../ImageLink';
+import { AboutStyles } from './AboutStyles';
 
 export function About() {
-  const className = 'text-2xl  text-center text-cyan-600 mb-4 leading-15';
+  const { className } = AboutStyles();
   return (
     <div className="max-w-2xl mx-auto p-5 ">
       <h1 className={className}>What about me?</h1>

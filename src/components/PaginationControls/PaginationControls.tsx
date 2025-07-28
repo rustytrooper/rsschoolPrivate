@@ -1,3 +1,5 @@
+import { PaginationControlsConstants } from './paginationConstants';
+
 interface PaginationControlsProps {
   totalPages: number;
   handlePageChange: (page: number) => void;
@@ -13,12 +15,8 @@ export function PaginationControls({
   handlePreviousPage,
   currentPage,
 }: PaginationControlsProps) {
-  const arrowButtonClassName =
-    'px-3 py-1 cursor-pointer border border-cyan-500 text-cyan-500 rounded-lg hover:bg-cyan-50 transition';
-  const disabledClassName =
-    'bg-gray-200 text-gray-400 cursor-not-allowed scale-100';
-  const pageClassName =
-    'px-3 py-1 cursor-pointer text-black hover:text-cyan-500 hover:scale-105 transition';
+  const { arrowButtonClassName, disabledClassName, pageClassName } =
+    PaginationControlsConstants();
 
   return (
     <div className="flex items-center justify-center space-x-4 mt-1">

@@ -7,11 +7,16 @@ import { About } from './components/About/About.tsx';
 import { Layout } from './components/Layout/Layout.tsx';
 import { CardDetails } from './components/DetailsPanel/DetailsPanel.tsx';
 import { ErrorPage } from './components/ErrorPage.tsx';
+import { ThemeProvider } from './shared/ThemeContext.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <ThemeProvider>
+        <Layout />
+      </ThemeProvider>
+    ),
     children: [
       {
         path: '/',

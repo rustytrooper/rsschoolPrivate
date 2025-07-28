@@ -1,12 +1,14 @@
 import { type PersonSWType } from '../../types/interfaces';
+import { CardStyles } from './CardStyles';
 
 export function Card({ name, hair_color, sex, age, occupation }: PersonSWType) {
+  const { bgckClassname, pClassName } = CardStyles();
   return (
-    <div className="h-full bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">
+    <div className={bgckClassname}>
       <p className="text-lg font-semibold text-gray-800">
         {name || 'Unknown Name'}
       </p>
-      <p className="mt-2 text-gray-600">{hair_color || 'No Hair Color'}</p>
+      <p className={pClassName}>{hair_color || 'No Hair Color'}</p>
       <p>{sex || 'Unknown Sex'}</p>
       <p>{age !== null ? age : 'Age not specified'}</p>
       <p>{`occupation: ${occupation || 'No Occupation'}`}</p>

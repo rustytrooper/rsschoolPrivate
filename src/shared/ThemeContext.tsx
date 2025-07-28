@@ -31,6 +31,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     document.documentElement.className = theme;
   }, [theme]);
   const toggleTheme = () => {
+    console.log(theme);
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 

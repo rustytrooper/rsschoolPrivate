@@ -1,10 +1,13 @@
 import { NavLink } from 'react-router';
+import { useTheme } from '../../shared/ThemeContext';
+import { HeaderStyles } from './HeaderStyles';
 
 export function Header() {
-  const classNameLink =
-    'text-white text-lg hover:text-gray-200 transition-colors';
+  const { toggleTheme } = useTheme();
+  const { classNameHeader, classNameLink, buttonClassname } = HeaderStyles();
+
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-cyan-500 shadow-md p-2">
+    <nav className={classNameHeader}>
       <div className="w-50  mx-auto flex justify-between ">
         <NavLink to="/" className={classNameLink}>
           Home
@@ -13,6 +16,9 @@ export function Header() {
           About
         </NavLink>
       </div>
+      <button onClick={toggleTheme} className={buttonClassname}>
+        CHANGE THEME
+      </button>
     </nav>
   );
 }

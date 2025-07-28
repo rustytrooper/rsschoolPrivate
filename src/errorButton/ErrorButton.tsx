@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { BaseButton } from '../components/BaseButton';
+import { BaseButton } from '../components/BaseButton/BaseButton';
 
 interface ErrorButtonState {
   isErrorShown: boolean;

@@ -2,6 +2,7 @@ import { useParams } from 'react-router';
 import type { PersonSWType } from '../../types/interfaces';
 import { useEffect, useState } from 'react';
 import { personService } from '../../shared/personService';
+import { DetailsPanelStyles } from './DetailsPanelStyles';
 
 interface CardDetailsState {
   cardData: PersonSWType | null;
@@ -17,7 +18,8 @@ export function CardDetails() {
     loading: true,
     error: null,
   });
-  const paragraphStyle = 'text-lg leading-7 mb-10';
+
+  const { bgckClassname, paragraphStyle } = DetailsPanelStyles();
 
   useEffect(() => {
     const fetchCardData = async () => {
@@ -36,7 +38,7 @@ export function CardDetails() {
   }, [id]);
 
   return (
-    <div className="w-150 h-150 mx-auto my-auto border border-cyan-500 rounded-3xl bg-slate-300 p-4 relative flex items-center justify-center">
+    <div className={bgckClassname}>
       <div className="my-auto">
         {cardState.cardData?.name && (
           <h2 className="text-2xl font-bold mb-10 ">

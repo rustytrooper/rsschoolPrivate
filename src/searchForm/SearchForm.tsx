@@ -1,5 +1,6 @@
-import { BaseButton } from '../components/BaseButton';
+import { BaseButton } from '../components/BaseButton/BaseButton';
 import { useLocalStorage } from '../shared/useLocalStorage';
+import { SearchFormConstants } from './SearchFormConstants';
 
 interface SearchFormProps {
   updateSearch: (newResult: string) => void;
@@ -8,6 +9,7 @@ interface SearchFormProps {
 }
 export function SearchForm(props: SearchFormProps) {
   const [searchInput, setSearchInput] = useLocalStorage('searchItem');
+  const { inputClassname } = SearchFormConstants();
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newSearchInput = e.target.value;
@@ -28,7 +30,7 @@ export function SearchForm(props: SearchFormProps) {
         value={searchInput}
         onChange={handleInputChange}
         placeholder="Your search here"
-        className="w-80 flex px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+        className={inputClassname}
       />
       <BaseButton onClick={props.onClick}>Search</BaseButton>
     </form>
