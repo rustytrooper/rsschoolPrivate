@@ -3,7 +3,7 @@ import { SearchResults } from './components/SearchResults/SearchResults';
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import { type PersonSWType } from './types/interfaces';
 import { Loader } from './components/loader/Loader';
-import { SearchForm } from './searchForm/SearchForm';
+import { SearchForm } from './components/searchForm/SearchForm';
 import { PaginationControls } from './components/PaginationControls/PaginationControls';
 import { useNavigate, Outlet, useParams } from 'react-router';
 import fetchData from './shared/useFetchData';

@@ -1,5 +1,5 @@
-import { BaseButton } from '../components/BaseButton/BaseButton';
-import { useLocalStorage } from '../shared/useLocalStorage';
+import { BaseButton } from '../BaseButton/BaseButton';
+import { useLocalStorage } from '../../shared/useLocalStorage';
 import { SearchFormConstants } from './SearchFormConstants';
 
 interface SearchFormProps {

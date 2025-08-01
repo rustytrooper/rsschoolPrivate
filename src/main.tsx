@@ -8,6 +8,8 @@ import { Layout } from './components/Layout/Layout.tsx';
 import { CardDetails } from './components/DetailsPanel/DetailsPanel.tsx';
 import { ErrorPage } from './components/ErrorPage.tsx';
 import { ThemeProvider } from './shared/ThemeContext.tsx';
+import { Provider } from 'react-redux';
+import store from './app/store.ts';
 
 const router = createBrowserRouter([
   {
@@ -50,7 +52,9 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </StrictMode>
   );
 } else {

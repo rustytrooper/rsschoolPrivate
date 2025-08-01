@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
 import { type PersonSWType } from '../../types/interfaces';
 import { SearchResults } from './SearchResults';
 import { MemoryRouter } from 'react-router';
+import { renderWithProviders } from '../../features/testUtils';
 
 describe('SearchResults Component', () => {
   it('displays error message when API call fails', () => {
@@ -14,8 +15,7 @@ describe('SearchResults Component', () => {
       errorMessage: 'Internal Server Error',
       onCardClick: () => {},
     };
-
-    render(
+    renderWithProviders(
       <MemoryRouter>
         <SearchResults {...mockProps} />
       </MemoryRouter>
@@ -33,8 +33,7 @@ describe('SearchResults Component', () => {
       errorMessage: 'Bad Request',
       onCardClick: () => {},
     };
-
-    render(
+    renderWithProviders(
       <MemoryRouter>
         <SearchResults {...mockProps} />
       </MemoryRouter>
@@ -52,13 +51,11 @@ describe('SearchResults Component', () => {
       errorMessage: undefined,
       onCardClick: () => {},
     };
-
-    render(
+    renderWithProviders(
       <MemoryRouter>
         <SearchResults {...mockProps} />
       </MemoryRouter>
     );
-
     expect(screen.getByText(/No results/i)).toBeInTheDocument();
   });
 
@@ -90,7 +87,7 @@ describe('SearchResults Component', () => {
       onCardClick: () => {},
     };
 
-    render(
+    renderWithProviders(
       <MemoryRouter>
         <SearchResults {...mockProps} />
       </MemoryRouter>

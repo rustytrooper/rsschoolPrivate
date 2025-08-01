@@ -47,8 +47,13 @@ export function SearchResults({
         {descriptions.map((person: PersonSWType) => {
           return (
             <li
-              onClick={() => person.id !== null && handleCardClick(person.id)}
-              key={person.name}
+              onClick={(e) => {
+                const target = e.target as HTMLElement;
+                if (person.id !== null && target.tagName !== 'INPUT') {
+                  handleCardClick(person.id);
+                }
+              }}
+              key={person.id}
             >
               <Card {...person} />
             </li>

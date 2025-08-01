@@ -1,4 +1,4 @@
-import { useTheme } from '../shared/ThemeContext';
+import { useTheme } from '../../shared/ThemeContext';
 
 export function SearchFormConstants() {
   const { theme } = useTheme();

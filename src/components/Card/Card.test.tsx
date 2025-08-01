@@ -1,11 +1,25 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, expect, it } from 'vitest';
 import { Card } from './Card';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from '../../features/CardSlice';
+import type { PersonSWType } from '../../types/interfaces';
+import { renderWithProviders } from '../../features/testUtils';
+
+const createStore = (preloadedState: PersonSWType[]) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState: {
+      card: preloadedState,
+    },
+  });
+};
 
 describe('Card Component', () => {
   it('displays item names and descriptions correctly', () => {
-    const mockData = {
+    const mockData: PersonSWType = {
       id: 1,
       name: 'Luke Skywalker',
       hair_color: 'Blond',
@@ -14,7 +28,13 @@ describe('Card Component', () => {
       occupation: 'Jedi',
     };
 
-    render(<Card {...mockData} />);
+    const store = createStore([mockData]);
+
+    renderWithProviders(
+      <Provider store={store}>
+        <Card {...mockData} />
+      </Provider>
+    );
 
     expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument();
     expect(screen.getByText(/Blond/i)).toBeInTheDocument();
@@ -24,7 +44,7 @@ describe('Card Component', () => {
   });
 
   it('handles missing or undefined data gracefully', () => {
-    const mockData = {
+    const mockData: PersonSWType = {
       id: null,
       name: null,
       hair_color: null,
@@ -33,7 +53,12 @@ describe('Card Component', () => {
       occupation: null,
     };
 
-    render(<Card {...mockData} />);
+    const store = createStore([mockData]);
+    renderWithProviders(
+      <Provider store={store}>
+        <Card {...mockData} />
+      </Provider>
+    );
 
     expect(screen.getByText(/Unknown Name/i)).toBeInTheDocument();
     expect(screen.getByText(/No Hair Color/i)).toBeInTheDocument();
