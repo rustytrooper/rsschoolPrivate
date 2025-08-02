@@ -9,6 +9,8 @@ import { useNavigate, Outlet, useParams } from 'react-router';
 import fetchData from './shared/useFetchData';
 import styles from './components/App/App.module.css';
 import { AppStyles } from './components/App/AppStyles';
+import { FlyOut } from './components/FlyOut/FlyOut';
+import { useSelector } from 'react-redux';
 
 export interface AppState {
   searchTerm: string;
@@ -34,6 +36,9 @@ const App: React.FC = () => {
     errorMessage: '',
   });
   const [isOutletVisible, setOutletVisible] = useState(false);
+  const card = useSelector(
+    (state: { card: { card: PersonSWType[] } }) => state.card.card
+  );
   const { buttonClassname } = AppStyles();
 
   const showOutlet = () => setOutletVisible(true);
@@ -139,6 +144,7 @@ const App: React.FC = () => {
               <Outlet />
             </div>
           )}
+          {card.length > 0 && <FlyOut numberOfSelected={card.length} />}
         </>
       )}
     </ErrorBoundary>

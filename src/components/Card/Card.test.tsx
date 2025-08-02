@@ -1,21 +1,10 @@
-import { screen } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, expect, it } from 'vitest';
 import { Card } from './Card';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from '../../features/CardSlice';
 import type { PersonSWType } from '../../types/interfaces';
-import { renderWithProviders } from '../../features/testUtils';
-
-const createStore = (preloadedState: PersonSWType[]) => {
-  return configureStore({
-    reducer: rootReducer,
-    preloadedState: {
-      card: preloadedState,
-    },
-  });
-};
+import { setupStore } from '../../app/store';
 
 describe('Card Component', () => {
   it('displays item names and descriptions correctly', () => {
@@ -28,9 +17,21 @@ describe('Card Component', () => {
       occupation: 'Jedi',
     };
 
-    const store = createStore([mockData]);
+    const initialState = {
+      card: [
+        {
+          id: 1,
+          name: 'Luke Skywalker',
+          hair_color: 'Blond',
+          sex: 'Male',
+          age: 19,
+          occupation: 'Jedi',
+        },
+      ],
+    };
+    const store = setupStore(initialState);
 
-    renderWithProviders(
+    render(
       <Provider store={store}>
         <Card {...mockData} />
       </Provider>
@@ -53,8 +54,21 @@ describe('Card Component', () => {
       occupation: null,
     };
 
-    const store = createStore([mockData]);
-    renderWithProviders(
+    const initialState = {
+      card: [
+        {
+          id: 1,
+          name: 'Luke Skywalker',
+          hair_color: 'Blond',
+          sex: 'Male',
+          age: 19,
+          occupation: 'Jedi',
+        },
+      ],
+    };
+    const store = setupStore(initialState);
+
+    render(
       <Provider store={store}>
         <Card {...mockData} />
       </Provider>

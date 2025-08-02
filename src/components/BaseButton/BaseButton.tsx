@@ -1,7 +1,7 @@
 import { BaseButtonStyles } from './BaseButtonStyles';
 
 interface BaseButtonProps {
-  onClick: VoidFunction;
+  onClick?: VoidFunction;
   children: string;
   additionalClasses?: string;
 }
