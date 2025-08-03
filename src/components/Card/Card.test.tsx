@@ -1,11 +1,14 @@
-import { render, screen } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, expect, it } from 'vitest';
 import { Card } from './Card';
+import { Provider } from 'react-redux';
+import type { PersonSWType } from '../../types/interfaces';
+import { setupStore, type RootState } from '../../app/store';
 
 describe('Card Component', () => {
-  it('displays item names and descriptions correctly', () => {
-    const mockData = {
+  it('should display item names and descriptions correctly', () => {
+    const mockData: PersonSWType = {
       id: 1,
       name: 'Luke Skywalker',
       hair_color: 'Blond',
@@ -14,7 +17,27 @@ describe('Card Component', () => {
       occupation: 'Jedi',
     };
 
-    render(<Card {...mockData} />);
+    const initialState: RootState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
+    const store = setupStore(initialState);
+
+    render(
+      <Provider store={store}>
+        <Card {...mockData} />
+      </Provider>
+    );
 
     expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument();
     expect(screen.getByText(/Blond/i)).toBeInTheDocument();
@@ -23,8 +46,8 @@ describe('Card Component', () => {
     expect(screen.getByText(/occupation: Jedi/i)).toBeInTheDocument();
   });
 
-  it('handles missing or undefined data gracefully', () => {
-    const mockData = {
+  it('should handle missing or undefined data gracefully', () => {
+    const mockData: PersonSWType = {
       id: null,
       name: null,
       hair_color: null,
@@ -33,7 +56,28 @@ describe('Card Component', () => {
       occupation: null,
     };
 
-    render(<Card {...mockData} />);
+    const initialState: RootState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
+
+    const store = setupStore(initialState);
+
+    render(
+      <Provider store={store}>
+        <Card {...mockData} />
+      </Provider>
+    );
 
     expect(screen.getByText(/Unknown Name/i)).toBeInTheDocument();
     expect(screen.getByText(/No Hair Color/i)).toBeInTheDocument();

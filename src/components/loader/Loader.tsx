@@ -1,6 +1,7 @@
 import './Loader.css';
+import { LoaderStyles } from './LoaderStyles';
 export const Loader = () => {
-  const classPoint = 'w-3 h-3 bg-cyan-500 rounded-full';
+  const { classPoint } = LoaderStyles();
   return (
     <div
       className="flex items-center justify-center h-screen"

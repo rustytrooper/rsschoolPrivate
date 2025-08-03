@@ -1,7 +1,7 @@
 import { type PersonSWType } from '../types/interfaces';
 import { BASE_URL } from './constants';
 
-export class personService {
+class personService {
   fetchData = async (
     page: number,
     searchTerm?: string
@@ -38,3 +38,5 @@ export class personService {
     }
   };
 }
+
+export const PersonService = new personService();

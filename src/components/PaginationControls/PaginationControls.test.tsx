@@ -14,7 +14,7 @@ describe('PaginationControls', () => {
     handlePreviousPage.mockClear();
   });
 
-  it('renders the correct number of page buttons', () => {
+  it('should render the correct number of page buttons', () => {
     render(
       <PaginationControls
         totalPages={5}
@@ -29,7 +29,7 @@ describe('PaginationControls', () => {
     expect(buttons.length).toBe(7);
   });
 
-  it('calls handlePageChange when a page button is clicked', () => {
+  it('should call handlePageChange when a page button is clicked', () => {
     render(
       <PaginationControls
         totalPages={5}
@@ -46,7 +46,7 @@ describe('PaginationControls', () => {
     expect(handlePageChange).toHaveBeenCalledWith(2);
   });
 
-  it('disables the previous button on the first page', () => {
+  it('should disable the previous button on the first page', () => {
     render(
       <PaginationControls
         totalPages={5}
@@ -61,7 +61,7 @@ describe('PaginationControls', () => {
     expect(previousButton).toBeDisabled();
   });
 
-  it('disables the next button on the last page', () => {
+  it('should disable the next button on the last page', () => {
     render(
       <PaginationControls
         totalPages={5}
@@ -76,7 +76,7 @@ describe('PaginationControls', () => {
     expect(nextButton).toBeDisabled();
   });
 
-  it('calls handleNextPage when next button is clicked', () => {
+  it('should call handleNextPage when next button is clicked', () => {
     render(
       <PaginationControls
         totalPages={5}
@@ -93,7 +93,7 @@ describe('PaginationControls', () => {
     expect(handleNextPage).toHaveBeenCalled();
   });
 
-  it('calls handlePreviousPage when previous button is clicked', () => {
+  it('should call handlePreviousPage when previous button is clicked', () => {
     render(
       <PaginationControls
         totalPages={5}
@@ -110,7 +110,7 @@ describe('PaginationControls', () => {
     expect(handlePreviousPage).toHaveBeenCalled();
   });
 
-  it('highlights the current page button', () => {
+  it('should highlight the current page button', () => {
     render(
       <PaginationControls
         totalPages={5}

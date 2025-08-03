@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.85% </span>
+                <span class="strong">82.6% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/42</span>
+                <span class='fraction'>38/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.85% </span>
+                <span class="strong">82.6% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/42</span>
+                <span class='fraction'>38/46</span>
             </div>
         
             
@@ -123,10 +123,11 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,18 +152,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -172,7 +170,11 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -186,12 +188,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { type PersonSWType } from '../../types/interfaces';
 import { Card } from '../Card/Card';
 import { useNavigate, useParams } from 'react-router';
+import { SearchResultsConstants } from './SearchResultsConsrants';
 &nbsp;
 interface SearchResultsProps {
   descriptions: PersonSWType[];
-  error: boolean;
+  error: Error | null;
   status: null | number;
-  errorMessage?: string;
   className?: string;
   onCardClick: (id: number) =&gt; void;
 }
@@ -199,29 +201,26 @@ interface SearchResultsProps {
 export function SearchResults({
   descriptions,
   error,
-  errorMessage,
   status,
   className,
   onCardClick,
 }: SearchResultsProps) {
   const navigate = useNavigate();
   const { page } = useParams();
+  const { bgckClassname } = SearchResultsConstants(className as string);
 &nbsp;
   const handleCardClick = <span class="fstat-no" title="function not covered" >(id: number) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    navigate(`/page/${page}/card/${id}`);</span>
 <span class="cstat-no" title="statement not covered" >    onCardClick(id);</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
-&nbsp;
   return (
-    &lt;div
-      className={`w-full p-4 shadow-md flex flex-col bg-slate-300 rounded-lg h-[80vh] ${className}`}
-    &gt;
+    &lt;div className={bgckClassname}&gt;
       {error &amp;&amp; (
         &lt;&gt;
           &lt;p className="text-center my-auto text-2xl"&gt;
-            Error occurred: {status ? `Status ${status<span class="branch-0 cbranch-no" title="branch not covered" >}` : 'Unknown error'}</span>
+            Error occurred: {status ? `Status ${status}` : 'Unknown error'}
           &lt;/p&gt;
-          {errorMessage &amp;&amp; &lt;p&gt;{errorMessage}&lt;/p&gt;}
+          {error &amp;&amp; &lt;p&gt;{error.message}&lt;/p&gt;}
         &lt;/&gt;
       )}
       {descriptions.length === 0 &amp;&amp; !error &amp;&amp; (
@@ -231,9 +230,13 @@ export function SearchResults({
         {descriptions.map((person: PersonSWType) =&gt; {
           return (
             &lt;li
-              data-testid="character-card"
-              onClick={<span class="fstat-no" title="function not covered" >() =&gt; person.id !== null &amp;&amp; handleCardClick(person.id)}</span>
-              key={person.name}
+              onClick={<span class="fstat-no" title="function not covered" >(e) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                const target = e.target as HTMLElement;</span>
+<span class="cstat-no" title="statement not covered" >                if (person.id !== null &amp;&amp; target.tagName !== 'INPUT') {</span>
+<span class="cstat-no" title="statement not covered" >                  handleCardClick(person.id);</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >              }}</span>
+              key={person.id}
             &gt;
               &lt;Card {...person} /&gt;
             &lt;/li&gt;
@@ -250,7 +253,7 @@ export function SearchResults({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-27T23:05:57.352Z
+                at 2025-08-03T20:08:09.347Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

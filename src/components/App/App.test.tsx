@@ -1,15 +1,15 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import App from '../../App';
-import { MemoryRouter } from 'react-router';
-import type { PersonSWType } from '../../types/interfaces';
-import { personService } from '../../shared/personService';
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router';
+import { describe, expect, it, vi } from 'vitest';
+import App from '../../App';
+import { setupStore } from '../../app/store';
+import { PersonService } from '../../shared/personService';
+import type { PersonSWType } from '../../types/interfaces';
 
 describe('App Component', () => {
-  const service = new personService();
-
-  it('mocks fetchData method', async () => {
+  it('should mock fetchData method', async () => {
     const mockData: PersonSWType[] = [
       {
         id: 1,
@@ -21,11 +21,13 @@ describe('App Component', () => {
       },
     ];
 
-    const spy = vi.spyOn(service, 'fetchData').mockImplementation(async () => {
-      return { dataFetched: mockData, errorMessage: null };
-    });
+    const spy = vi
+      .spyOn(PersonService, 'fetchData')
+      .mockImplementation(async () => {
+        return { dataFetched: mockData, errorMessage: null };
+      });
 
-    const result = await service.fetchData(1);
+    const result = await PersonService.fetchData(1);
     expect(result).toEqual({ dataFetched: mockData, errorMessage: null });
     expect(spy).toHaveBeenCalledWith(1);
     expect(spy).toHaveReturnedWith(
@@ -33,7 +35,7 @@ describe('App Component', () => {
     );
   });
 
-  it('mocks fetchCharacterData method', async () => {
+  it('should mock fetchCharacterData method', async () => {
     const mockCharacter: PersonSWType = {
       id: 1,
       name: 'Stan Marsh',
@@ -44,53 +46,166 @@ describe('App Component', () => {
     };
 
     const spy = vi
-      .spyOn(service, 'fetchCharacterData')
+      .spyOn(PersonService, 'fetchCharacterData')
       .mockImplementation(async () => {
         return { dataFetched: mockCharacter, errorMessage: null };
       });
 
-    const result = await service.fetchCharacterData(1);
+    const result = await PersonService.fetchCharacterData(1);
     expect(result).toEqual({ dataFetched: mockCharacter, errorMessage: null });
     expect(spy).toHaveBeenCalledWith(1);
     expect(spy).toHaveReturnedWith(
       Promise.resolve({ dataFetched: mockCharacter, errorMessage: null })
     );
   });
-  it('renders loading indicator initially', () => {
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    expect(getByTestId('loader')).toBeInTheDocument();
-  });
+  it('should render loading indicator initially', () => {
+    const initialState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
 
-  it('has appropriate ARIA labels for screen readers', () => {
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-    const loader = getByTestId('loader');
-    expect(loader).toHaveAttribute('aria-label', 'Loading...');
-  });
+    const store = setupStore(initialState);
 
-  it('renders loading indicator initially', () => {
     render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </Provider>
     );
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
-  it('has appropriate ARIA labels for screen readers', () => {
+  it('should have appropriate ARIA labels for screen readers', () => {
+    const initialState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
+
+    const store = setupStore(initialState);
+
     render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </Provider>
     );
+
     const loader = screen.getByTestId('loader');
     expect(loader).toHaveAttribute('aria-label', 'Loading...');
+  });
+
+  it('should render loading indicator initially', () => {
+    const initialState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
+
+    const store = setupStore(initialState);
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+    expect(screen.getByTestId('loader')).toBeInTheDocument();
+  });
+
+  it('should have appropriate ARIA labels for screen readers', () => {
+    const initialState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
+
+    const store = setupStore(initialState);
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    const loader = screen.getByTestId('loader');
+    expect(loader).toHaveAttribute('aria-label', 'Loading...');
+  });
+
+  it('should set state after fetching data', async () => {
+    const mockData: PersonSWType[] = [
+      {
+        id: 1,
+        name: 'Stan Marsh',
+        age: 10,
+        sex: 'male',
+        occupation: 'student',
+        hair_color: 'black',
+      },
+    ];
+
+    const spy = vi.spyOn(PersonService, 'fetchData').mockResolvedValue({
+      dataFetched: mockData,
+      errorMessage: null,
+    });
+
+    const initialState = {
+      card: { card: [] },
+    };
+
+    const store = setupStore(initialState);
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(await screen.findByText(/Stan Marsh/i)).toBeInTheDocument();
+    expect(spy).toHaveBeenCalled();
   });
 });

@@ -1,5 +1,4 @@
-import image from '../../public/i.png';
-
+import image from '../assets/i.png';
 export const ImageLink = () => {
   return (
     <div className="flex justify-center absolute left-0 bottom-0">

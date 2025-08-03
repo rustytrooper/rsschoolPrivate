@@ -1,71 +1,90 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SearchResults } from './components/SearchResults/SearchResults';
-import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import { type PersonSWType } from './types/interfaces';
-import { Loader } from './components/loader/Loader';
-import { SearchForm } from './searchForm/SearchForm';
+import { Loader } from './components/Loader/Loader';
+import { SearchForm } from './components/SearchForm/SearchForm';
 import { PaginationControls } from './components/PaginationControls/PaginationControls';
 import { useNavigate, Outlet, useParams } from 'react-router';
-import fetchData from './shared/useFetchData';
 import styles from './components/App/App.module.css';
+import { AppStyles } from './components/App/AppStyles';
+import { FlyOut } from './components/FlyOut/FlyOut';
+import { useSelector } from 'react-redux';
+import { PersonService } from './shared/personService';
+import { useLocalStorage } from './shared/useLocalStorage';
+import { normalizeError } from './shared/utils';
 
 export interface AppState {
-  searchTerm: string;
   data: PersonSWType[];
   currentPage: number;
   loading: boolean;
-  error: boolean;
+  error: Error | null;
   status: null | number;
-  errorMessage?: string;
 }
 
 const ALL_PAGES = 20;
 
 const App: React.FC = () => {
   const { page = '1' } = useParams();
+
+  const [storedQuery, setStoredQuery] = useLocalStorage('searchItem');
+
   const [appState, setAppState] = useState<AppState>({
-    searchTerm: localStorage.getItem('searchItem') || '',
     data: [],
     currentPage: parseInt(page),
     loading: true,
-    error: false,
     status: null,
-    errorMessage: '',
+    error: null,
   });
-  const [isOutletVisible, setOutletVisible] = useState(false);
 
+  const card = useSelector(
+    (state: { card: { card: PersonSWType[] } }) => state.card.card
+  );
+  const { buttonClassname } = AppStyles();
+
+  const [isOutletVisible, setOutletVisible] = useState(false);
   const showOutlet = () => setOutletVisible(true);
   const hideOutlet = () => setOutletVisible(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchData(appState.currentPage, setAppState, appState);
-    navigate(`/page/${appState.currentPage}`);
-  }, [appState.currentPage, navigate]);
+  const fetchCharacters = useCallback(
+    (query: string) => {
+      setAppState((prev) => ({ ...prev, loading: true, error: null }));
 
-  function updateSearchInputValue(newResult: string) {
-    const trimmedResult = newResult.trim();
-    setAppState((prevState) => ({
-      ...prevState,
-      searchTerm: trimmedResult,
-      currentPage: 1,
-    }));
-  }
-  function handleSearch() {
-    fetchData(1, setAppState, appState);
-    setAppState((prev) => ({
-      ...prev,
-      currentPage: 1,
-    }));
-    navigate(`/page/1`);
-  }
+      PersonService.fetchData(appState.currentPage, query).then(
+        (response) => {
+          setAppState((prev) => ({
+            ...prev,
+            data: response.dataFetched ?? [],
+            loading: false,
+            error: null,
+          }));
+        },
+        (err: unknown) => {
+          setAppState((prev) => ({
+            ...prev,
+            loading: false,
+            error: normalizeError(err),
+            data: [],
+          }));
+        }
+      );
+
+      setStoredQuery(query);
+    },
+    [appState.currentPage, setStoredQuery]
+  );
+
+  useEffect(() => {
+    fetchCharacters(storedQuery);
+    navigate(`/page/${appState.currentPage}`);
+  }, [fetchCharacters, storedQuery]);
 
   function handlePageChange(page: number) {
     setAppState({
       ...appState,
       currentPage: page,
     });
-    navigate(`/page/${page}`);
+    navigate(`/page/${appState.currentPage}`);
   }
   function handleNextPage() {
     if (appState.currentPage <= ALL_PAGES) {
@@ -74,6 +93,7 @@ const App: React.FC = () => {
         currentPage: appState.currentPage + 1,
       });
     }
+    navigate(`/page/${appState.currentPage}`);
   }
   function handlePreviousPage() {
     if (appState.currentPage >= 1) {
@@ -82,10 +102,11 @@ const App: React.FC = () => {
         currentPage: appState.currentPage - 1,
       });
     }
+    navigate(`/page/${appState.currentPage}`);
   }
 
   return (
-    <ErrorBoundary>
+    <>
       {appState.loading ? (
         <Loader />
       ) : (
@@ -98,7 +119,7 @@ const App: React.FC = () => {
                     appState.currentPage ? `/page/${appState.currentPage}` : '/'
                   );
                 }}
-                className="absolute w-10 top-4 right-4 text-lg bg-white rounded shadow-md p-2 hover:bg-gray-200 cursor-pointer transition-colors"
+                className={buttonClassname}
               >
                 {'X'}
               </button>
@@ -109,18 +130,14 @@ const App: React.FC = () => {
             className={`${styles.content} ${isOutletVisible ? styles.blur : ''}`}
           >
             <SearchForm
-              updateSearch={updateSearchInputValue}
-              onClick={handleSearch}
-              onFormSubmit={(e) => {
-                e.preventDefault();
-                handleSearch();
-              }}
+              initialQuery={storedQuery}
+              onFormSubmit={fetchCharacters}
             />
+
             <SearchResults
               descriptions={appState.data}
               error={appState.error}
               status={appState.status}
-              errorMessage={appState.errorMessage}
               onCardClick={showOutlet}
             />
             <PaginationControls
@@ -137,9 +154,10 @@ const App: React.FC = () => {
               <Outlet />
             </div>
           )}
+          {card.length > 0 && <FlyOut numberOfSelected={card.length} />}
         </>
       )}
-    </ErrorBoundary>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import { About } from './About';
 import '@testing-library/jest-dom';
 
 describe('About', () => {
-  it('renders the correct content', () => {
+  it('should render the correct content', () => {
     render(<About />);
 
     const additionalText = screen.getByText(

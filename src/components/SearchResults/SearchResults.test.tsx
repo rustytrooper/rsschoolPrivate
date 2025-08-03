@@ -1,68 +1,107 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
+import { describe, expect, it } from 'vitest';
 import { type PersonSWType } from '../../types/interfaces';
 import { SearchResults } from './SearchResults';
-import { MemoryRouter } from 'react-router';
+import { Provider } from 'react-redux';
+import { setupStore, type RootState } from '../../app/store';
 
 describe('SearchResults Component', () => {
-  it('displays error message when API call fails', () => {
+  it('should display error message when API call fails', () => {
     const mockProps = {
       descriptions: [],
-      error: true,
+      error: new Error('Test error message'),
       status: 500,
-      errorMessage: 'Internal Server Error',
       onCardClick: () => {},
     };
+    const initialState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
 
+    const store = setupStore(initialState);
     render(
-      <MemoryRouter>
-        <SearchResults {...mockProps} />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <SearchResults {...mockProps} />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByText(/Error occurred: Status 500/i)).toBeInTheDocument();
-    expect(screen.getByText(/Internal Server Error/i)).toBeInTheDocument();
   });
 
-  it('shows appropriate error for 400 status code', () => {
+  it('should show appropriate error for 400 status code', () => {
     const mockProps = {
       descriptions: [],
-      error: true,
+      error: new Error('Test error message'),
       status: 400,
-      errorMessage: 'Bad Request',
       onCardClick: () => {},
     };
+    const initialState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
+
+    const store = setupStore(initialState);
 
     render(
-      <MemoryRouter>
-        <SearchResults {...mockProps} />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <SearchResults {...mockProps} />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByText(/Error occurred: Status 400/i)).toBeInTheDocument();
-    expect(screen.getByText(/Bad Request/i)).toBeInTheDocument();
   });
 
-  it('displays no results message when there are no descriptions', () => {
+  it('should display no results message when there are no descriptions', () => {
     const mockProps = {
       descriptions: [],
-      error: false,
+      error: null,
       status: null,
-      errorMessage: undefined,
       onCardClick: () => {},
     };
+    const initialState: RootState = {
+      card: {
+        card: [],
+      },
+    };
 
+    const store = setupStore(initialState);
     render(
-      <MemoryRouter>
-        <SearchResults {...mockProps} />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <SearchResults {...mockProps} />
+        </MemoryRouter>
+      </Provider>
     );
-
     expect(screen.getByText(/No results/i)).toBeInTheDocument();
   });
 
-  it('renders a list of Card components when descriptions are provided', () => {
+  it('should render a list of Card components when descriptions are provided', () => {
     const mockData: PersonSWType[] = [
       {
         id: 1,
@@ -84,18 +123,34 @@ describe('SearchResults Component', () => {
 
     const mockProps = {
       descriptions: mockData,
-      error: false,
+      error: new Error('Test error message'),
       status: null,
-      errorMessage: undefined,
       onCardClick: () => {},
     };
 
-    render(
-      <MemoryRouter>
-        <SearchResults {...mockProps} />
-      </MemoryRouter>
-    );
+    const initialState: RootState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
+    };
 
+    const store = setupStore(initialState);
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <SearchResults {...mockProps} />
+        </MemoryRouter>
+      </Provider>
+    );
     expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument();
     expect(screen.getByText(/Darth Vader/i)).toBeInTheDocument();
   });

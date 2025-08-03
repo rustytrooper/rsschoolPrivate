@@ -1,4 +1,8 @@
 @import 'tailwindcss';
+/* @import 'tailwindcss/preflight'; */
+@tailwind base;
+@tailwind utilities;
+@tailwind utilities;
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -22,4 +26,12 @@ body {
 h1 {
   font-size: 3em;
   line-height: 1;
+}
+
+html.dark {
+  @apply bg-slate-900 text-white;
+}
+
+html.light {
+  @apply bg-white text-black;
 }
