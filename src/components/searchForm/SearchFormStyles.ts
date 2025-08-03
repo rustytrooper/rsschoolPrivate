@@ -1,6 +1,6 @@
 import { useTheme } from '../../shared/ThemeContext';
 
-export function SearchFormConstants() {
+export function SearchFormStyles() {
   const { theme } = useTheme();
   const inputClassname = `${
     theme === 'light'

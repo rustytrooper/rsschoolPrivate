@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router';
 import '@testing-library/jest-dom';
 
 describe('Header', () => {
-  it('renders navigation links', () => {
+  it('should render navigation links', () => {
     render(
       <MemoryRouter>
         <Header />

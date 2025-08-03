@@ -1,4 +1,4 @@
-import { PaginationControlsConstants } from './paginationConstants';
+import { PaginationControlsStyles } from './paginationStyles';
 
 interface PaginationControlsProps {
   totalPages: number;
@@ -16,11 +16,12 @@ export function PaginationControls({
   currentPage,
 }: PaginationControlsProps) {
   const { arrowButtonClassName, disabledClassName, pageClassName } =
-    PaginationControlsConstants();
+    PaginationControlsStyles();
 
   return (
     <div className="flex items-center justify-center space-x-4 mt-1">
       <button
+        data-testid="previous-button"
         onClick={handlePreviousPage}
         disabled={currentPage <= 1}
         className={`${arrowButtonClassName} ${currentPage <= 1 ? disabledClassName : ''}`}
@@ -47,6 +48,7 @@ export function PaginationControls({
         );
       })}
       <button
+        data-testid="next-button"
         onClick={handleNextPage}
         disabled={currentPage >= totalPages}
         className={`${arrowButtonClassName} ${currentPage >= totalPages ? disabledClassName : ''}`}

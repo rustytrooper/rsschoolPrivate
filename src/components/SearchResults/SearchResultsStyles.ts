@@ -1,6 +1,6 @@
 import { useTheme } from '../../shared/ThemeContext';
 
-export function SearchResultsConstants(className: string) {
+export function SearchResultsStyles(className: string) {
   const { theme } = useTheme();
   const bgckClassname = `${
     theme === 'light'

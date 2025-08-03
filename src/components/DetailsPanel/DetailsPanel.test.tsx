@@ -1,20 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router';
-
 import { CardDetails } from './DetailsPanel';
-import { personService } from '../../shared/personService';
+import { PersonService } from '../../shared/personService';
 import type { PersonSWType } from '../../types/interfaces';
 import '@testing-library/jest-dom';
 
 describe('CardDetails', () => {
-  const service = new personService();
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('mocks fetchData method', async () => {
+  it('should mock fetchData method', async () => {
     const mockData: PersonSWType[] = [
       {
         id: 1,
@@ -26,11 +23,13 @@ describe('CardDetails', () => {
       },
     ];
 
-    const spy = vi.spyOn(service, 'fetchData').mockImplementation(async () => {
-      return { dataFetched: mockData, errorMessage: null };
-    });
+    const spy = vi
+      .spyOn(PersonService, 'fetchData')
+      .mockImplementation(async () => {
+        return { dataFetched: mockData, errorMessage: null };
+      });
 
-    const result = await service.fetchData(1);
+    const result = await PersonService.fetchData(1);
     expect(result).toEqual({ dataFetched: mockData, errorMessage: null });
     expect(spy).toHaveBeenCalledWith(1);
     expect(spy).toHaveReturnedWith(
@@ -38,7 +37,7 @@ describe('CardDetails', () => {
     );
   });
 
-  it('mocks fetchCharacterData method', async () => {
+  it('should mock fetchCharacterData method', async () => {
     const mockCharacter: PersonSWType = {
       id: 1,
       name: 'Stan Marsh',
@@ -49,12 +48,12 @@ describe('CardDetails', () => {
     };
 
     const spy = vi
-      .spyOn(service, 'fetchCharacterData')
+      .spyOn(PersonService, 'fetchCharacterData')
       .mockImplementation(async () => {
         return { dataFetched: mockCharacter, errorMessage: null };
       });
 
-    const result = await service.fetchCharacterData(1);
+    const result = await PersonService.fetchCharacterData(1);
     expect(result).toEqual({ dataFetched: mockCharacter, errorMessage: null });
     expect(spy).toHaveBeenCalledWith(1);
     expect(spy).toHaveReturnedWith(
@@ -62,8 +61,8 @@ describe('CardDetails', () => {
     );
   });
 
-  it('handles loading state correctly', async () => {
-    vi.spyOn(service, 'fetchCharacterData').mockImplementationOnce(() => {
+  it('should handle loading state correctly', async () => {
+    vi.spyOn(PersonService, 'fetchCharacterData').mockImplementationOnce(() => {
       return new Promise(() => {});
     });
 

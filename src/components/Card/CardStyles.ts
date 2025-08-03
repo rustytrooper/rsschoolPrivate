@@ -5,7 +5,7 @@ export function CardStyles() {
   const bgckClassname = `${
     theme === 'light'
       ? 'h-full bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1 relative'
-      : 'h-full bg-slate-600 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1'
+      : 'h-full bg-slate-600 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1 relative'
   }`;
   const pClassName = `${
     theme === 'light' ? 'mt-2 text-gray-900' : 'mt-2 text-slate-50'

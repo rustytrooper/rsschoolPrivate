@@ -10,6 +10,7 @@ import { ErrorPage } from './components/ErrorPage.tsx';
 import { ThemeProvider } from './shared/ThemeContext.tsx';
 import { Provider } from 'react-redux';
 import store from './app/store.ts';
+import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary.tsx';
 
 const router = createBrowserRouter([
   {
@@ -52,9 +53,11 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
+      </ErrorBoundary>
     </StrictMode>
   );
 } else {

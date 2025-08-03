@@ -1,16 +1,14 @@
+import type { ButtonHTMLAttributes } from 'react';
 import { BaseButtonStyles } from './BaseButtonStyles';
-
-interface BaseButtonProps {
-  onClick?: VoidFunction;
-  children: string;
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   additionalClasses?: string;
-}
+};
 
 export function BaseButton({
   onClick,
   children,
   additionalClasses,
-}: BaseButtonProps) {
+}: ButtonProps) {
   const { className } = BaseButtonStyles(additionalClasses || '');
   return (
     <button className={className} onClick={onClick}>

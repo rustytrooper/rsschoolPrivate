@@ -1,25 +1,28 @@
 import { BaseButton } from '../BaseButton/BaseButton';
-import { useLocalStorage } from '../../shared/useLocalStorage';
-import { SearchFormConstants } from './SearchFormConstants';
+import { SearchFormStyles } from './SearchFormStyles';
+import { useState } from 'react';
 
 interface SearchFormProps {
-  updateSearch: (newResult: string) => void;
-  onFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  onClick: VoidFunction;
+  onFormSubmit: (query: string) => void;
+  initialQuery: string;
 }
+
 export function SearchForm(props: SearchFormProps) {
-  const [searchInput, setSearchInput] = useLocalStorage('searchItem');
-  const { inputClassname } = SearchFormConstants();
+  const [searchQuery, setSearchQuery] = useState(props.initialQuery);
+  const { inputClassname } = SearchFormStyles();
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newSearchInput = e.target.value;
-    setSearchInput(newSearchInput);
-    props.updateSearch(newSearchInput);
+    setSearchQuery(e.target.value);
   }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    props.onFormSubmit(searchQuery.trim());
+  };
 
   return (
     <form
-      onSubmit={props.onFormSubmit}
+      onSubmit={handleSubmit}
       className="flex justify-between my-3 mt-10"
       role="form"
     >
@@ -27,12 +30,12 @@ export function SearchForm(props: SearchFormProps) {
         data-testid="textbox"
         autoFocus
         type="text"
-        value={searchInput}
+        value={searchQuery}
         onChange={handleInputChange}
         placeholder="Your search here"
         className={inputClassname}
       />
-      <BaseButton onClick={props.onClick}>Search</BaseButton>
+      <BaseButton type="submit">Search</BaseButton>
     </form>
   );
 }

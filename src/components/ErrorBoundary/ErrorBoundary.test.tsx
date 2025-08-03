@@ -24,7 +24,7 @@ describe('Error Boundary', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  it('catches and handles JavaScript errors in child components', () => {
+  it('should catch and handles JavaScript errors in child components', () => {
     const ProblemChild = () => {
       throw new Error('I crashed!');
     };
@@ -40,7 +40,7 @@ describe('Error Boundary', () => {
     expect(errorText).toBeInTheDocument();
   });
 
-  it('logs error to console', () => {
+  it('should log error to console', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -63,7 +63,7 @@ describe('Error Boundary', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it('displays fallback UI when error occurs', () => {
+  it('should display fallback UI when error occurs', () => {
     const ProblemChild = () => {
       throw new Error('I crashed!');
     };
@@ -77,7 +77,7 @@ describe('Error Boundary', () => {
     expect(screen.getByText(/Something went wrong./i)).toBeInTheDocument();
   });
 
-  it('shows fallback UI on button click that throws error', async () => {
+  it('should show fallback UI on button click that throws error', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const TestComponent = () => (

@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import type { PersonSWType } from '../../types/interfaces';
 import { useEffect, useState } from 'react';
-import { personService } from '../../shared/personService';
+import { PersonService } from '../../shared/personService';
 import { DetailsPanelStyles } from './DetailsPanelStyles';
 
 interface CardDetailsState {
@@ -18,15 +18,13 @@ export function CardDetails() {
     loading: true,
     error: null,
   });
-
   const { bgckClassname, paragraphStyle } = DetailsPanelStyles();
 
   useEffect(() => {
     const fetchCardData = async () => {
-      const service = new personService();
       const searchId = Number(id);
       const { dataFetched, errorMessage } =
-        await service.fetchCharacterData(searchId);
+        await PersonService.fetchCharacterData(searchId);
 
       if (errorMessage) {
         setCardState({ cardData: null, loading: false, error: errorMessage });

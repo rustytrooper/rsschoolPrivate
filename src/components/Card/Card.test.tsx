@@ -4,10 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { Card } from './Card';
 import { Provider } from 'react-redux';
 import type { PersonSWType } from '../../types/interfaces';
-import { setupStore } from '../../app/store';
+import { setupStore, type RootState } from '../../app/store';
 
 describe('Card Component', () => {
-  it('displays item names and descriptions correctly', () => {
+  it('should display item names and descriptions correctly', () => {
     const mockData: PersonSWType = {
       id: 1,
       name: 'Luke Skywalker',
@@ -17,17 +17,19 @@ describe('Card Component', () => {
       occupation: 'Jedi',
     };
 
-    const initialState = {
-      card: [
-        {
-          id: 1,
-          name: 'Luke Skywalker',
-          hair_color: 'Blond',
-          sex: 'Male',
-          age: 19,
-          occupation: 'Jedi',
-        },
-      ],
+    const initialState: RootState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
     };
     const store = setupStore(initialState);
 
@@ -44,7 +46,7 @@ describe('Card Component', () => {
     expect(screen.getByText(/occupation: Jedi/i)).toBeInTheDocument();
   });
 
-  it('handles missing or undefined data gracefully', () => {
+  it('should handle missing or undefined data gracefully', () => {
     const mockData: PersonSWType = {
       id: null,
       name: null,
@@ -54,18 +56,21 @@ describe('Card Component', () => {
       occupation: null,
     };
 
-    const initialState = {
-      card: [
-        {
-          id: 1,
-          name: 'Luke Skywalker',
-          hair_color: 'Blond',
-          sex: 'Male',
-          age: 19,
-          occupation: 'Jedi',
-        },
-      ],
+    const initialState: RootState = {
+      card: {
+        card: [
+          {
+            id: 1,
+            name: 'Luke Skywalker',
+            hair_color: 'Blond',
+            sex: 'Male',
+            age: 19,
+            occupation: 'Jedi',
+          },
+        ],
+      },
     };
+
     const store = setupStore(initialState);
 
     render(

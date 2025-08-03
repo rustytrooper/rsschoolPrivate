@@ -15,19 +15,17 @@ const cardSlice = createSlice({
     },
     removeCard: (state, action: PayloadAction<PersonSWType>) => {
       const index = state.card.findIndex(
-        (card) =>
-          card.name === action.payload.name &&
-          card.hair_color === action.payload.hair_color &&
-          card.sex === action.payload.sex &&
-          card.age === action.payload.age &&
-          card.occupation === action.payload.occupation
+        (card) => card.id === action.payload.id
       );
       if (index !== -1) {
         state.card.splice(index, 1);
       }
     },
+    removeAllCards: (state) => {
+      state.card = [];
+    },
   },
 });
 
-export const { addCard, removeCard } = cardSlice.actions;
+export const { addCard, removeCard, removeAllCards } = cardSlice.actions;
 export default cardSlice.reducer;

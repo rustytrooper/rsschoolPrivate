@@ -1,13 +1,12 @@
 import { type PersonSWType } from '../../types/interfaces';
 import { Card } from '../Card/Card';
 import { useNavigate, useParams } from 'react-router';
-import { SearchResultsConstants } from './SearchResultsConsrants';
+import { SearchResultsStyles } from './SearchResultsStyles';
 
 interface SearchResultsProps {
   descriptions: PersonSWType[];
-  error: boolean;
+  error: Error | null;
   status: null | number;
-  errorMessage?: string;
   className?: string;
   onCardClick: (id: number) => void;
 }
@@ -15,21 +14,18 @@ interface SearchResultsProps {
 export function SearchResults({
   descriptions,
   error,
-  errorMessage,
   status,
   className,
   onCardClick,
 }: SearchResultsProps) {
   const navigate = useNavigate();
   const { page } = useParams();
-
-  const { bgckClassname } = SearchResultsConstants(className as string);
+  const { bgckClassname } = SearchResultsStyles(className as string);
 
   const handleCardClick = (id: number) => {
     navigate(`/page/${page}/card/${id}`);
     onCardClick(id);
   };
-
   return (
     <div className={bgckClassname}>
       {error && (
@@ -37,7 +33,7 @@ export function SearchResults({
           <p className="text-center my-auto text-2xl">
             Error occurred: {status ? `Status ${status}` : 'Unknown error'}
           </p>
-          {errorMessage && <p>{errorMessage}</p>}
+          {error && <p>{error.message}</p>}
         </>
       )}
       {descriptions.length === 0 && !error && (

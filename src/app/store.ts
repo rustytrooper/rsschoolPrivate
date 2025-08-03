@@ -1,33 +1,22 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import cardReducer from '../features/CardSlice';
-import type { PersonSWType } from '../types/interfaces';
 
-// interface RootState {
-//   card: {
-//     card: PersonSWType[];
-//   };
-// }
-
-const store = configureStore({
-  reducer: {
-    card: cardReducer,
-  },
+const rootReducer = combineReducers({
+  card: cardReducer,
 });
 
-// export function setupStore(preloadedState?: Partial<RootState>) {
-//   return configureStore({
-//     reducer: cardReducer,
-//     preloadedState,
-//   });
-// }
-export function setupStore(preloadedState?: { card: PersonSWType[] }) {
+const store = configureStore({
+  reducer: rootReducer,
+});
+
+export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
-    reducer: cardReducer,
+    reducer: rootReducer,
     preloadedState,
   });
 }
 
-export type RootState = ReturnType<typeof cardReducer>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];
 

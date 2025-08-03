@@ -16,14 +16,7 @@ export function Card({
     (state: { card: { card: PersonSWType[] } }) => state.card.card
   );
   const dispatch = useDispatch();
-  const isChecked = card.some(
-    (c) =>
-      c.name === name &&
-      c.hair_color === hair_color &&
-      c.sex === sex &&
-      c.age === age &&
-      c.occupation === occupation
-  );
+  const isChecked = card.some((c) => c.id === id);
   return (
     <div className={bgckClassname}>
       <p className="text-lg font-semibold text-gray-800">
@@ -37,10 +30,8 @@ export function Card({
         type="checkbox"
         className={checkBoxClassName}
         checked={isChecked}
-        onClick={(e) => {
-          e.preventDefault();
-          const target = e.target as HTMLInputElement;
-          if (target.checked) {
+        onChange={(e) => {
+          if (e.target.checked) {
             dispatch(addCard({ name, hair_color, sex, age, occupation, id }));
           } else {
             dispatch(

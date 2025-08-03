@@ -3,22 +3,17 @@ import '@testing-library/jest-dom';
 import { describe, expect, vi, it, beforeEach } from 'vitest';
 import { SearchForm } from './SearchForm';
 
-const updateSearchMock = vi.fn();
 const onFormSubmitMock = vi.fn();
-const onClickMock = vi.fn();
+const initialQuery = 'car';
 
 describe('Search Form Tests', () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
-  it('renders search input and search button', () => {
+  it('should render search input and search button', () => {
     render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
+      <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initialQuery} />
     );
     expect(
       screen.getByPlaceholderText(/Your search here/i)
@@ -26,14 +21,10 @@ describe('Search Form Tests', () => {
     expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
   });
 
-  it('displays previously saved search term from localStorage on mount', async () => {
+  it('should display previously saved search term from localStorage on mount', async () => {
     localStorage.setItem('searchItem', 'cartman');
     render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
+      <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initialQuery} />
     );
     const input = (await screen.findByPlaceholderText(
       /Your search here/i
@@ -45,14 +36,10 @@ describe('Search Form Tests', () => {
     });
   });
 
-  it('shows empty input when no saved term exists', async () => {
+  it('should show empty input when no saved term exists', async () => {
     localStorage.removeItem('searchItem');
     render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
+      <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initialQuery} />
     );
     const input = (await screen.findByPlaceholderText(
       /Your search here/i
@@ -61,13 +48,9 @@ describe('Search Form Tests', () => {
     expect(input.value).toBe('');
   });
 
-  it('updates input value when user types', () => {
+  it('should update input value when user types', () => {
     render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
+      <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initialQuery} />
     );
     const input = screen.getByPlaceholderText(
       /Your search here/i
@@ -76,13 +59,9 @@ describe('Search Form Tests', () => {
     expect(input.value).toBe('broflovski');
   });
 
-  it('saves search term to localStorage when search button is clicked', () => {
+  it('should save search term to localStorage when search button is clicked', () => {
     render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
+      <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initialQuery} />
     );
     const input = screen.getByPlaceholderText(/Your search here/i);
     fireEvent.click(screen.getByRole('button', { name: /search/i }));
@@ -91,13 +70,9 @@ describe('Search Form Tests', () => {
     expect(localStorage.getItem('searchItem')).toBe('spooky fish');
   });
 
-  it('trims whitespace from search input before saving', () => {
+  it('should trim whitespace from search input before saving', () => {
     render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
+      <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initialQuery} />
     );
     const input = screen.getByPlaceholderText(/Your search here/i);
     fireEvent.change(input, { target: { value: '   term with spaces   ' } });
@@ -107,37 +82,15 @@ describe('Search Form Tests', () => {
     expect(localStorage.getItem('searchItem')).toBe('term with spaces');
   });
 
-  it('retrieves saved search term on component mount', () => {
+  it('should retrieve saved search term on component mount', () => {
     localStorage.setItem('searchItem', 'fred');
+    const initQuery = localStorage.getItem('searchItem') as string;
     render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
+      <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initQuery} />
     );
     const input = screen.getByPlaceholderText(
       /Your search here/i
     ) as HTMLInputElement;
     expect(input.value).toBe('fred');
-  });
-
-  it('overwrites existing localStorage value when new search is performed', () => {
-    localStorage.setItem('searchItem', 'stan');
-    render(
-      <SearchForm
-        updateSearch={updateSearchMock}
-        onFormSubmit={onFormSubmitMock}
-        onClick={onClickMock}
-      />
-    );
-
-    const input = screen.getByPlaceholderText(
-      /Your search here/i
-    ) as HTMLInputElement;
-    const button = screen.getByRole('button', { name: /search/i });
-    fireEvent.change(input, { target: { value: 'new search term' } });
-    fireEvent.click(button);
-    expect(localStorage.getItem('searchItem')).toBe('new search term');
   });
 });

@@ -1,6 +1,6 @@
 import { useTheme } from '../../shared/ThemeContext';
 
-export function PaginationControlsConstants() {
+export function PaginationControlsStyles() {
   const { theme } = useTheme();
   const arrowButtonClassName = `${
     theme === 'light'
