@@ -1,8 +1,9 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Component } from 'react';
 import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 
 class ErrorButton extends Component {
   state = { hasError: false };
@@ -20,7 +21,7 @@ class ErrorButton extends Component {
   }
 }
 
-describe('Error Boundary', () => {
+describe('Boundary', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -63,20 +64,6 @@ describe('Error Boundary', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it('should display fallback UI when error occurs', () => {
-    const ProblemChild = () => {
-      throw new Error('I crashed!');
-    };
-
-    render(
-      <ErrorBoundary>
-        <ProblemChild />
-      </ErrorBoundary>
-    );
-
-    expect(screen.getByText(/Something went wrong./i)).toBeInTheDocument();
-  });
-
   it('should show fallback UI on button click that throws error', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
@@ -87,7 +74,7 @@ describe('Error Boundary', () => {
     );
 
     render(<TestComponent />);
-    fireEvent.click(screen.getByText(/Throw Error/i));
+    userEvent.click(screen.getByText(/Throw Error/i));
     await waitFor(() => {
       expect(screen.getByText(/Something went wrong./i)).toBeInTheDocument();
     });

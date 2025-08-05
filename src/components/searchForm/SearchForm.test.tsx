@@ -1,7 +1,8 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, expect, vi, it, beforeEach } from 'vitest';
 import { SearchForm } from './SearchForm';
+import userEvent from '@testing-library/user-event';
 
 const onFormSubmitMock = vi.fn();
 const initialQuery = 'car';
@@ -64,7 +65,7 @@ describe('Search Form Tests', () => {
       <SearchForm onFormSubmit={onFormSubmitMock} initialQuery={initialQuery} />
     );
     const input = screen.getByPlaceholderText(/Your search here/i);
-    fireEvent.click(screen.getByRole('button', { name: /search/i }));
+    userEvent.click(screen.getByRole('button', { name: /search/i }));
     fireEvent.change(input, { target: { value: 'spooky fish' } });
     localStorage.setItem('searchItem', 'spooky fish');
     expect(localStorage.getItem('searchItem')).toBe('spooky fish');
@@ -77,7 +78,7 @@ describe('Search Form Tests', () => {
     const input = screen.getByPlaceholderText(/Your search here/i);
     fireEvent.change(input, { target: { value: '   term with spaces   ' } });
     const button = screen.getByRole('button', { name: /search/i });
-    fireEvent.click(button);
+    userEvent.click(button);
     localStorage.setItem('searchItem', 'term with spaces');
     expect(localStorage.getItem('searchItem')).toBe('term with spaces');
   });
