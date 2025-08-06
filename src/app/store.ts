@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import cardReducer from '../features/CardSlice';
+import { personSlice } from '../features/CardSlice';
 
 const rootReducer = combineReducers({
-  card: cardReducer,
+  person: personSlice.reducer,
 });
 
 const store = configureStore({
