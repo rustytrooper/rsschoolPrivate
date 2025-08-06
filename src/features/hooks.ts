@@ -4,11 +4,11 @@ import { type RootState } from '../app/store';
 import {
   selectStatusByQuery,
   selectDataByQuery,
-  fetchPersonByName,
+  fetchPersonsByName,
 } from './CardSlice';
 import type { Action, ThunkDispatch } from '@reduxjs/toolkit';
 
-export function useGetPokemonByNameQuery(name: string) {
+export function useGetPersonsByQuery(name: string) {
   const dispatch: ThunkDispatch<RootState, unknown, Action> = useDispatch();
   const status = useSelector((state: RootState) =>
     selectStatusByQuery(state, name)
@@ -18,7 +18,7 @@ export function useGetPokemonByNameQuery(name: string) {
   );
   useEffect(() => {
     if (status === undefined) {
-      dispatch(fetchPersonByName(name));
+      dispatch(fetchPersonsByName(name));
     }
   }, [status, name, dispatch]);
 

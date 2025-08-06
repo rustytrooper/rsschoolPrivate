@@ -5,7 +5,7 @@ import { SearchResultsStyles } from './SearchResultsStyles';
 
 interface SearchResultsProps {
   descriptions: PersonSWType[];
-  error: Error | null;
+  error: boolean | null;
   status: null | number;
   className?: string;
   onCardClick: (id: number) => void;
@@ -33,7 +33,7 @@ export function SearchResults({
           <p className="text-center my-auto text-2xl">
             Error occurred: {status ? `Status ${status}` : 'Unknown error'}
           </p>
-          {error && <p>{error.message}</p>}
+          {error && <p>{error}</p>}
         </>
       )}
       {descriptions.length === 0 && !error && (
