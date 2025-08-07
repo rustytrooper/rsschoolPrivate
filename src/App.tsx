@@ -9,16 +9,13 @@ import styles from './components/App/App.module.css';
 import { AppStyles } from './components/App/AppStyles';
 import { FlyOut } from './components/FlyOut/FlyOut';
 import { useSelector } from 'react-redux';
-// import { PersonService } from './shared/personService';
+import { PersonService } from './shared/personService';
 import { useLocalStorage } from './shared/useLocalStorage';
-// import { normalizeError } from './shared/utils';
-import { useGetPersonsByQuery } from './features/hooks';
+import { normalizeError } from './shared/utils';
+import { useGetPersonsQuery } from './services/api';
 
 export interface AppState {
-  // data: PersonSWType[];
   currentPage: number;
-  // loading: boolean;
-  // error: Error | null;
   status: null | number;
 }
 
@@ -30,21 +27,18 @@ const App: React.FC = () => {
   const [storedQuery, setStoredQuery] = useLocalStorage('searchItem');
 
   const [appState, setAppState] = useState<AppState>({
-    // data: [],
     currentPage: parseInt(page),
-    // loading: true,
     status: null,
-    // error: null,
+  });
+  const { data, error, isLoading } = useGetPersonsQuery({
+    search: storedQuery,
+    page: appState.currentPage,
   });
 
-  const { data, isLoading, isError } = useGetPersonsByQuery(storedQuery);
-
-  // const card = useSelector(
-  //   (state: { card: { card: PersonSWType[] } }) => state.card.card
-  // );
   const card = useSelector(
-    (state: { persons: { persons: PersonSWType[] } }) => state.persons.persons
+    (state: { card: { card: PersonSWType[] } }) => state.card.card
   );
+
   const { buttonClassname } = AppStyles();
 
   const [isOutletVisible, setOutletVisible] = useState(false);
@@ -56,47 +50,24 @@ const App: React.FC = () => {
     (query: string) => {
       setAppState((prev) => ({ ...prev, loading: true, error: null }));
 
-      // if (isSuccess) {
-      //   setAppState((prev) => ({
-      //     ...prev,
-      //     data: data ?? [],
-      //     loading: false,
-      //     error: null,
-      //   }));
-      // }
-      if (isError) {
-        setAppState((prev) => ({
-          ...prev,
-          loading: false,
-          error: new Error('Error while fetching data'),
-          data: [],
-        }));
-      }
-      setAppState((prev) => ({
-        ...prev,
-        data: data ?? [],
-        loading: false,
-        error: null,
-      }));
-
-      // PersonService.fetchData(appState.currentPage, query).then(
-      //   (response) => {
-      //     setAppState((prev) => ({
-      //       ...prev,
-      //       data: response.dataFetched ?? [],
-      //       loading: false,
-      //       error: null,
-      //     }));
-      //   },
-      //   (err: unknown) => {
-      //     setAppState((prev) => ({
-      //       ...prev,
-      //       loading: false,
-      //       error: normalizeError(err),
-      //       data: [],
-      //     }));
-      //   }
-      // );
+      PersonService.fetchData(appState.currentPage, query).then(
+        (response) => {
+          setAppState((prev) => ({
+            ...prev,
+            data: response.dataFetched ?? [],
+            loading: false,
+            error: null,
+          }));
+        },
+        (err: unknown) => {
+          setAppState((prev) => ({
+            ...prev,
+            loading: false,
+            error: normalizeError(err),
+            data: [],
+          }));
+        }
+      );
 
       setStoredQuery(query);
     },
@@ -162,10 +133,9 @@ const App: React.FC = () => {
               initialQuery={storedQuery}
               onFormSubmit={fetchCharacters}
             />
-
             <SearchResults
-              descriptions={data}
-              error={isError}
+              descriptions={data?.data ?? []}
+              error={error}
               status={appState.status}
               onCardClick={showOutlet}
             />

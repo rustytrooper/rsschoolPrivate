@@ -27,6 +27,7 @@ export function Card({
       <p>{age !== null ? age : 'Age not specified'}</p>
       <p>{`occupation: ${occupation || 'No Occupation'}`}</p>
       <input
+        name="cardCheckbox"
         type="checkbox"
         className={checkBoxClassName}
         checked={isChecked}

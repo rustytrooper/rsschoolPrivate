@@ -9,8 +9,8 @@ import { CardDetails } from './components/DetailsPanel/DetailsPanel.tsx';
 import { ErrorPage } from './components/ErrorPage.tsx';
 import { ThemeProvider } from './shared/ThemeContext.tsx';
 import { Provider } from 'react-redux';
-import store from './app/store.ts';
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary.tsx';
+import { store } from './app/store.ts';
 
 const router = createBrowserRouter([
   {

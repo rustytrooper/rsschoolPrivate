@@ -34,8 +34,11 @@ export function SearchForm(props: SearchFormProps) {
         onChange={handleInputChange}
         placeholder="Your search here"
         className={inputClassname}
+        name="searchInput"
       />
-      <BaseButton type="submit">Search</BaseButton>
+      <BaseButton type="submit" name="searchButton">
+        Search
+      </BaseButton>
     </form>
   );
 }
