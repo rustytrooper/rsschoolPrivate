@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PaginationControls } from './PaginationControls';
 import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 
 describe('PaginationControls', () => {
   const handlePageChange = vi.fn();
@@ -29,7 +30,8 @@ describe('PaginationControls', () => {
     expect(buttons.length).toBe(7);
   });
 
-  it('should call handlePageChange when a page button is clicked', () => {
+  it('should call handlePageChange when a page button is clicked', async () => {
+    const user = userEvent.setup();
     render(
       <PaginationControls
         totalPages={5}
@@ -41,7 +43,7 @@ describe('PaginationControls', () => {
     );
 
     const pageButton = screen.getByText('2');
-    fireEvent.click(pageButton);
+    await user.click(pageButton);
 
     expect(handlePageChange).toHaveBeenCalledWith(2);
   });
@@ -76,7 +78,8 @@ describe('PaginationControls', () => {
     expect(nextButton).toBeDisabled();
   });
 
-  it('should call handleNextPage when next button is clicked', () => {
+  it('should call handleNextPage when next button is clicked', async () => {
+    const user = userEvent.setup();
     render(
       <PaginationControls
         totalPages={5}
@@ -88,12 +91,13 @@ describe('PaginationControls', () => {
     );
 
     const nextButton = screen.getByText('>');
-    fireEvent.click(nextButton);
+    await user.click(nextButton);
 
     expect(handleNextPage).toHaveBeenCalled();
   });
 
-  it('should call handlePreviousPage when previous button is clicked', () => {
+  it('should call handlePreviousPage when previous button is clicked', async () => {
+    const user = userEvent.setup();
     render(
       <PaginationControls
         totalPages={5}
@@ -105,7 +109,7 @@ describe('PaginationControls', () => {
     );
 
     const previousButton = screen.getByText('<');
-    fireEvent.click(previousButton);
+    await user.click(previousButton);
 
     expect(handlePreviousPage).toHaveBeenCalled();
   });

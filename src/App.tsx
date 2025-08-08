@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchResults } from './components/SearchResults/SearchResults';
 import { type PersonSWType } from './types/interfaces';
 import { Loader } from './components/Loader/Loader';
@@ -9,15 +9,12 @@ import styles from './components/App/App.module.css';
 import { AppStyles } from './components/App/AppStyles';
 import { FlyOut } from './components/FlyOut/FlyOut';
 import { useSelector } from 'react-redux';
-import { PersonService } from './shared/personService';
 import { useLocalStorage } from './shared/useLocalStorage';
-import { normalizeError } from './shared/utils';
+import { useGetPersonsQuery } from './services/api';
+import { BaseButton } from './components/BaseButton/BaseButton';
 
 export interface AppState {
-  data: PersonSWType[];
   currentPage: number;
-  loading: boolean;
-  error: Error | null;
   status: null | number;
 }
 
@@ -29,55 +26,31 @@ const App: React.FC = () => {
   const [storedQuery, setStoredQuery] = useLocalStorage('searchItem');
 
   const [appState, setAppState] = useState<AppState>({
-    data: [],
     currentPage: parseInt(page),
-    loading: true,
     status: null,
-    error: null,
+  });
+  const { data, error, isLoading, isFetching, refetch } = useGetPersonsQuery({
+    search: storedQuery,
+    page: appState.currentPage,
   });
 
   const card = useSelector(
     (state: { card: { card: PersonSWType[] } }) => state.card.card
   );
+
   const { buttonClassname } = AppStyles();
 
   const [isOutletVisible, setOutletVisible] = useState(false);
   const showOutlet = () => setOutletVisible(true);
   const hideOutlet = () => setOutletVisible(false);
   const navigate = useNavigate();
-
-  const fetchCharacters = useCallback(
-    (query: string) => {
-      setAppState((prev) => ({ ...prev, loading: true, error: null }));
-
-      PersonService.fetchData(appState.currentPage, query).then(
-        (response) => {
-          setAppState((prev) => ({
-            ...prev,
-            data: response.dataFetched ?? [],
-            loading: false,
-            error: null,
-          }));
-        },
-        (err: unknown) => {
-          setAppState((prev) => ({
-            ...prev,
-            loading: false,
-            error: normalizeError(err),
-            data: [],
-          }));
-        }
-      );
-
-      setStoredQuery(query);
-    },
-    [appState.currentPage, setStoredQuery]
-  );
+  const fetchCharacters = (query: string) => {
+    setStoredQuery(query);
+  };
 
   useEffect(() => {
-    fetchCharacters(storedQuery);
     navigate(`/page/${appState.currentPage}`);
-  }, [fetchCharacters, storedQuery]);
+  }, [storedQuery]);
 
   function handlePageChange(page: number) {
     setAppState({
@@ -107,7 +80,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {appState.loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <>
@@ -133,13 +106,16 @@ const App: React.FC = () => {
               initialQuery={storedQuery}
               onFormSubmit={fetchCharacters}
             />
-
-            <SearchResults
-              descriptions={appState.data}
-              error={appState.error}
-              status={appState.status}
-              onCardClick={showOutlet}
-            />
+            {isFetching ? (
+              <Loader />
+            ) : (
+              <SearchResults
+                descriptions={data?.data ?? []}
+                error={error}
+                status={appState.status}
+                onCardClick={showOutlet}
+              />
+            )}
             <PaginationControls
               totalPages={ALL_PAGES}
               handlePageChange={handlePageChange}
@@ -155,6 +131,12 @@ const App: React.FC = () => {
             </div>
           )}
           {card.length > 0 && <FlyOut numberOfSelected={card.length} />}
+          <BaseButton
+            onClick={refetch}
+            additionalClasses="w-50 absolute top-24 right-4"
+          >
+            Refetch cards
+          </BaseButton>
         </>
       )}
     </>
