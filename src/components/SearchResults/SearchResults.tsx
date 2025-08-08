@@ -24,7 +24,6 @@ export function SearchResults({
   const navigate = useNavigate();
   const { page } = useParams();
   const { bgckClassname } = SearchResultsStyles(className as string);
-  console.log('descriptions', descriptions);
   const handleCardClick = (id: number) => {
     navigate(`/page/${page}/card/${id}`);
     onCardClick(id);

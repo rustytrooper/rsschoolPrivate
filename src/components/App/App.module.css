@@ -8,7 +8,9 @@
 }
 
 .content {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   z-index: 20;
   transition: all 0.2s;
 }

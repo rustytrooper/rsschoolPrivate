@@ -27,6 +27,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'page/:page',
+            element: <CardDetails />,
             children: [
               {
                 path: 'card/:id',

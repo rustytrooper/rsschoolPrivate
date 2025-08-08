@@ -9,6 +9,9 @@ type GetPersonsQuery = {
 type ReturnQueryType = {
   data: PersonSWType[];
 };
+type ReturnQueryPersonType = {
+  data: PersonSWType;
+};
 
 export const api = createApi({
   reducerPath: 'api',
@@ -18,7 +21,10 @@ export const api = createApi({
     getPersons: builder.query<ReturnQueryType, GetPersonsQuery>({
       query: ({ search, page }) => `?search=${search}&page=${page}`,
     }),
+    getPerson: builder.query<ReturnQueryPersonType, number>({
+      query: (id) => `/${id}`,
+    }),
   }),
 });
 
-export const { useGetPersonsQuery } = api;
+export const { useGetPersonsQuery, useGetPersonQuery } = api;

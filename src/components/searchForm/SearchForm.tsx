@@ -23,7 +23,7 @@ export function SearchForm(props: SearchFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex justify-between my-3 mt-10"
+      className="flex justify-between mt-5"
       role="form"
     >
       <input
