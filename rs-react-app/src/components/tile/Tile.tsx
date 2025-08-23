@@ -31,40 +31,46 @@ export const Tile = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type="text"
           placeholder="name"
+          // name="name"
           {...(register && register('name'))}
           ref={refs?.nameRef}
-          className="border border-gray rounded-2xl pl-5"
+          className="border border-gray rounded-2xl pl-5 py-1"
         />
         <input
           type="number"
           placeholder="age"
+          // name="age"
           {...(register && register('age'))}
           ref={refs?.ageRef}
-          className="border border-gray rounded-2xl pl-5"
+          className="border border-gray rounded-2xl pl-5 py-1"
         />
         <input
           type="email"
           placeholder="email"
+          // name="email"
           {...(register && register('email'))}
           ref={refs?.emailRef}
-          className="border border-gray rounded-2xl pl-5"
+          className="border border-gray rounded-2xl pl-5 py-1"
         />
         <input
           type="password"
           placeholder="password"
+          // name="password"
           {...(register && register('password'))}
           ref={refs?.passwordRef}
-          className="border border-gray rounded-2xl pl-5"
+          className="border border-gray rounded-2xl pl-5 py-1"
         />
         <input
           type="password"
           placeholder="confirm password"
+          // name="confirmPassword"
           {...(register && register('confirmPassword'))}
           ref={refs?.passwordRef}
-          className="border border-gray rounded-2xl pl-5"
+          className="border border-gray rounded-2xl pl-5 py-1"
         />
         <input
           type="radio"
+          name="gender"
           {...(register && register('gender'))}
           ref={refs?.genderRef}
           value="male"
@@ -74,6 +80,7 @@ export const Tile = React.forwardRef<HTMLInputElement, InputProps>(
           type="radio"
           {...(register && register('gender'))}
           value="female"
+          name="gender"
           ref={refs?.genderRef}
         />
         Female
@@ -81,13 +88,15 @@ export const Tile = React.forwardRef<HTMLInputElement, InputProps>(
           type="checkbox"
           {...(register && register('terms'))}
           ref={refs?.termsRef}
+          name="terms"
         />
         Accept Terms
         <input
           type="file"
           {...(register && register('file'))}
           ref={refs?.fileRef}
-        />{' '}
+          name="file"
+        />
         Choose profile pic
       </div>
     );

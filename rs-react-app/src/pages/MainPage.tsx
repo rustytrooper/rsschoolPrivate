@@ -15,11 +15,9 @@ export function MainPage() {
     isUncontrolledOpen: false,
   });
   return (
-    <main className="h-full">
+    <main className="h-full mx-auto">
       <Modal isOpen={isOpen.isModalOpen}>
-        {isOpen.isHookOpen && (
-          <FormHook onSubmit={() => console.log('submitted')} />
-        )}
+        {isOpen.isHookOpen && <FormHook />}
         {isOpen.isUncontrolledOpen && (
           <FormUncontrolled onSubmit={() => console.log('submitted')} />
         )}

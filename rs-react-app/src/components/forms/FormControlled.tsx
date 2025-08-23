@@ -1,8 +1,13 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler, get } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Tile } from '../tile/Tile';
 import { BaseButton } from '../button/BaseButton';
+import type { FormEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { changeFields } from '../../store/formSlice';
+import type { FormFields } from '../../shared/types';
+// import { useEffect } from 'react';
 
 const schema = z.object({
   name: z.string().min(1),
@@ -31,17 +36,36 @@ const schema = z.object({
   file: z.instanceof(File).optional(),
 });
 
-const FormHook = ({ onSubmit }: { onSubmit: (data: any) => void }) => {
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm({
+const FormHook = () => {
+  const { register, handleSubmit, watch, formState, getValues } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: '',
+      age: 0,
+      email: '',
+      password: '',
+      confirmPassword: '',
+      gender: 'male',
+      terms: false,
+      file: undefined,
+    },
+    // mode: 'onChange',
   });
+  const dispatch = useDispatch();
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const data = watch();
+    dispatch(changeFields(data));
+    console.log(data);
+  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={(e: React.FormEvent) => {
+        onSubmit(e);
+      }}
+    >
       <h1>IM CONTROLLED</h1>
       <Tile register={register} />
       <BaseButton type="submit">Submit</BaseButton>
