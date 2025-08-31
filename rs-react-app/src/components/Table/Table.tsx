@@ -8,6 +8,24 @@ import { countryTransform, fetchHelper } from '../../utils/fetchHelper';
 
 export const Table = () => {
   const [countryEntries, setCountryEntries] = useState<TransformedCountry[]>();
+  console.log(countryEntries);
+
+  const getLatestYearData = () => {
+    const latestYears = Object.entries(countryEntries!).map(
+      ([countryName, countryData]) => {
+        // console.log(countryData.name);
+        const sortedData = countryData.data.sort((a, b) => b.year - a.year);
+
+        return {
+          name: countryData.name,
+          iso_code: countryData.iso_code,
+          data: sortedData,
+        };
+      }
+    );
+    return latestYears;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchHelper<Record<string, countriesData>>({
@@ -19,6 +37,9 @@ export const Table = () => {
       // const data = await response;
       const transformedData = countryTransform(response);
       setCountryEntries(transformedData);
+      // getLatestYearData();
+      const latestYears = getLatestYearData();
+      setCountryEntries(latestYears);
     };
     fetchData();
   }, []);
@@ -37,13 +58,13 @@ export const Table = () => {
       return flattedData;
     })
     .flat();
-  console.log(tableBody);
+  // console.log(tableBody);
 
   return (
     <div>
       <input
         type="text"
-        placeholder="Поиск..."
+        placeholder="Search"
         className="w-full p-2 mb-4 rounded-md shadow-md focus:outline-none focus:ring focus:border-blue-300"
         // value={searchTerm}
         // onChange={(e) => setSearchTerm(e.target.value)}
