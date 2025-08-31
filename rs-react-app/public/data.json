@@ -1,0 +1,40 @@
+{
+  "Afgan": {
+    "iso_code": "AFG",
+    "data": [
+      {
+        "year": 1750,
+        "population": 38928,
+        "cement_co2": 5,
+        "cement_co2_per_capita": 5,
+        "cumulative_cement_co2": 5
+      },
+      {
+        "year": 2750,
+        "population": 55008,
+        "cement_co2": 6,
+        "cement_co2_per_capita": 6,
+        "cumulative_cement_co2": 6
+      }
+    ]
+  },
+  "Belar": {
+    "iso_code": "BLR",
+    "data": [
+      {
+        "year": 3450,
+        "population": 38928,
+        "cement_co2": 11,
+        "cement_co2_per_capita": 11,
+        "cumulative_cement_co2": 11
+      },
+      {
+        "year": 5550,
+        "population": 55008,
+        "cement_co2": 12,
+        "cement_co2_per_capita": 12,
+        "cumulative_cement_co2": 12
+      }
+    ]
+  }
+}
