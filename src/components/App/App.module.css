@@ -1,0 +1,31 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1px);
+  z-index: 10;
+  transition: color 0.2s;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 20;
+  transition: all 0.2s;
+}
+
+.blur {
+  filter: blur(3px);
+}
+
+.outlet {
+  position: fixed;
+  top: 20vh;
+  right: 0;
+  width: 33%;
+  height: 100%;
+  z-index: 30;
+  padding: 16px;
+  transition: all 0.2s;
+}
